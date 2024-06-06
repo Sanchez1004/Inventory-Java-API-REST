@@ -18,43 +18,55 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemEntity> getAllItems() {
-        return itemRepository.findAll();
+        try {
+            return itemRepository.findAll();
+        } catch (Exception e) {
+            throw new ItemException("An error occurred while fetching all items", e);
+        }
     }
 
     @Override
     public ItemEntity getItemById(Long id) {
-        return itemRepository.findById(id)
-                .orElseThrow(() -> new ItemException("Item not found with id: " + id));
+        try {
+            Optional<ItemEntity> item = itemRepository.findById(id);
+            return item.orElseThrow(() -> new ItemException("Item not found with id: " + id));
+        } catch (Exception e) {
+            throw new ItemException("An error occurred while fetching the item with id: " + id, e);
+        }
     }
 
     public ItemEntity createItem(ItemEntity item) {
-        return itemRepository.save(item);
+        try {
+            Optional<ItemEntity> savedItem = Optional.of(itemRepository.save(item));
+            return savedItem.orElseThrow(() -> new ItemException("Failed to create item"));
+        } catch (Exception e) {
+            throw new ItemException("An error occurred while creating the item", e);
+        }
     }
 
     public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
-        ItemEntity existingItem = getItemById(id);
+        try {
+            ItemEntity existingItem = getItemById(id);
 
-        existingItem.setName(newItemDetails.getName());
-        existingItem.setDescription(newItemDetails.getDescription());
-        existingItem.setPrice(newItemDetails.getPrice());
+            existingItem.setName(newItemDetails.getName());
+            existingItem.setDescription(newItemDetails.getDescription());
+            existingItem.setPrice(newItemDetails.getPrice());
 
-        return itemRepository.save(existingItem);
+            return itemRepository.save(existingItem);
+        } catch (ItemException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ItemException("An error occurred while updating the item", e);
+        }
     }
 
     public boolean deleteItemById(Long id) {
-        Optional<ItemEntity> existingItem = itemRepository.findById(id);
-
-        if (!existingItem.isPresent()) {
-            throw new ItemException("Item not found with id " + id);
-        }
-
         try {
-            itemRepository.delete(existingItem.get());
+            ItemEntity existingItem = getItemById(id);
+            itemRepository.delete(existingItem);
+            return true;
         } catch (Exception e) {
             throw new ItemException("An error occurred while deleting the item with id: " + id, e);
         }
-
-        return !itemRepository.existsById(id); // Checks if the element was successfully deleted
     }
-
 }
