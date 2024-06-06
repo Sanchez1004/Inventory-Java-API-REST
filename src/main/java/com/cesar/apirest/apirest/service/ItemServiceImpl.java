@@ -1,36 +1,39 @@
 package com.cesar.apirest.apirest.service;
 
-import com.cesar.apirest.apirest.entity.Item;
+import com.cesar.apirest.apirest.entity.ItemEntity;
 import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
+@Service("ItemService")
 public class ItemServiceImpl implements ItemService {
-    @Autowired
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
+
+    public ItemServiceImpl(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
 
     @Override
-    public List<Item> getAllItems() {
+    public List<ItemEntity> getAllItems() {
         return itemRepository.findAll();
     }
 
     @Override
-    public Item getItemById(Long id) {
+    public ItemEntity getItemById(Long id) {
         return itemRepository.findById(id)
-                .orElseThrow(() -> new ItemException("Item was not found with id: " + id));
+                .orElseThrow(() -> new ItemException("Item not found with id: " + id));
     }
 
-    public Item createItem(Item item) {
+    public ItemEntity createItem(ItemEntity item) {
         return itemRepository.save(item);
     }
 
-    public Item updateItem(Long id, Item newItemDetails) {
-        Item existingItem = getItemById(id);
-        
+    public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
+        ItemEntity existingItem = getItemById(id);
+
         existingItem.setName(newItemDetails.getName());
         existingItem.setDescription(newItemDetails.getDescription());
         existingItem.setPrice(newItemDetails.getPrice());
@@ -38,10 +41,20 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.save(existingItem);
     }
 
-    public String deleteItemById(Long id) {
-        Item existingItem = getItemById(id);
+    public boolean deleteItemById(Long id) {
+        Optional<ItemEntity> existingItem = itemRepository.findById(id);
 
-        itemRepository.delete(existingItem);
-        return ("Item: " + existingItem.getName() +", successfully deleted with id: " + id);
+        if (!existingItem.isPresent()) {
+            throw new ItemException("Item not found with id " + id);
+        }
+
+        try {
+            itemRepository.delete(existingItem.get());
+        } catch (Exception e) {
+            throw new ItemException("An error occurred while deleting the item with id: " + id, e);
+        }
+
+        return !itemRepository.existsById(id); // Checks if the element was successfully deleted
     }
+
 }

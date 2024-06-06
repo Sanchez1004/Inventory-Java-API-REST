@@ -1,8 +1,11 @@
 package com.cesar.apirest.apirest.controller;
 
-import com.cesar.apirest.apirest.entity.Item;
+import com.cesar.apirest.apirest.entity.ItemEntity;
 import com.cesar.apirest.apirest.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,58 +15,62 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
 
+    //Using @Qualifier allow us to choose which implementation to use depending on the name of the class @ServiceName
+    public ItemController(@Qualifier("ItemService") ItemService itemService) {
+        this.itemService = itemService;
+    }
+
+
+    @Operation(summary = "Get all items list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Items found"),
+            @ApiResponse(responseCode = "404", description = "Items not found")
+
+    })
     @GetMapping
-//    public List<Item> GetAllItems() {
-//        return itemRepository.findAll();
-//    }
-    public ResponseEntity<List<Item>> getAllItems() {
+    public ResponseEntity<List<ItemEntity>> getAllItems() {
         return ResponseEntity.ok(itemService.getAllItems());
     }
 
+    @Operation(summary = "Get specified item by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Item found"),
+            @ApiResponse(responseCode = "404", description = "Item not found")
+    })
     @GetMapping("/{id}")
-//    public Item GetItemById(@PathVariable Long id) {
-//        return itemRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
-//    }
-    public ResponseEntity<Item> getItemById(@PathVariable Long id) {
+    public ResponseEntity<ItemEntity> getItemById(@PathVariable Long id) {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
+    @Operation(summary = "Create item receiving the details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Item successfully created"),
+            @ApiResponse(responseCode = "404", description = "Error creating the item")
+    })
     @PostMapping
-//    public Item CreateItem(@RequestBody Item item) {
-//        return itemRepository.save(item);
-//    }
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<ItemEntity> createItem(@RequestBody ItemEntity item) {
         return new ResponseEntity<>(itemService.createItem(item), HttpStatus.CREATED);
     }
 
+
     @PutMapping("/{id}")
-//    public Item UpdateItem(@PathVariable Long id, @RequestBody Item detailsItem) {
-//        Item item = itemRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
-//
-//        item.setName(detailsItem.getName());
-//        item.setDescription(detailsItem.getDescription());
-//        item.setPrice(detailsItem.getPrice());
-//
-//        return itemRepository.save(item);
-//    }
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item detailsItem) {
+    public ResponseEntity<ItemEntity> updateItem(@PathVariable Long id, @RequestBody ItemEntity detailsItem) {
         return ResponseEntity.ok(itemService.updateItem(id, detailsItem));
     }
 
     @DeleteMapping("/{id}")
-//    public String DeleteItem(@PathVariable Long id) {
-//        Item item = itemRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("Item not found with id: " + id));
-//
-//        itemRepository.delete(item);
-//        return "Item with id: " + id + " deleted successfully";
-//    }
     public ResponseEntity<String> deleteItem(@PathVariable Long id) {
-        return ResponseEntity.ok(itemService.deleteItemById(id));
+        try {
+            boolean isDeleted = itemService.deleteItemById(id);
+            if (isDeleted) {
+                return ResponseEntity.ok("Item deleted successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the item");
+        }
     }
 }

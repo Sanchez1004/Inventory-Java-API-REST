@@ -1,6 +1,5 @@
 package com.cesar.apirest.apirest;
 
-import com.cesar.apirest.apirest.entity.Item;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 

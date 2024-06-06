@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.repository;
 
 
-import com.cesar.apirest.apirest.entity.Item;
+import com.cesar.apirest.apirest.entity.ItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {}
+public interface ItemRepository extends JpaRepository<ItemEntity, Long> {}
