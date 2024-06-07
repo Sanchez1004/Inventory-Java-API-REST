@@ -1,7 +1,10 @@
 package com.cesar.apirest.apirest.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.Setter;
 
