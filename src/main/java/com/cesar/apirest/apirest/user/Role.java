@@ -1,2 +1,6 @@
-package com.cesar.apirest.apirest.user;public class Role {
+package com.cesar.apirest.apirest.user;
+
+public enum Role {
+    ADMIN,
+    USER
 }

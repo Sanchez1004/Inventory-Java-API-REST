@@ -1,6 +1,6 @@
-package com.cesar.apirest.apirest.user2.service;
+package com.cesar.apirest.apirest.user.service;
 
-import com.cesar.apirest.apirest.user2.entity.UserEntity;
+import com.cesar.apirest.apirest.user.entity.UserEntity;
 import com.cesar.apirest.apirest.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

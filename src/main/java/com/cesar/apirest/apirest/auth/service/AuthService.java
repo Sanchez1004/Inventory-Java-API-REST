@@ -1,8 +1,8 @@
-package com.cesar.apirest.apirest.user2.auth.service;
+package com.cesar.apirest.apirest.auth.service;
 
-import com.cesar.apirest.apirest.user2.auth.AuthResponse;
-import com.cesar.apirest.apirest.user2.auth.LoginRequest;
-import com.cesar.apirest.apirest.user2.auth.RegisterRequest;
+import com.cesar.apirest.apirest.auth.AuthResponse;
+import com.cesar.apirest.apirest.auth.LoginRequest;
+import com.cesar.apirest.apirest.auth.RegisterRequest;
 
 public interface AuthService {
     AuthResponse login(LoginRequest registerRequest);

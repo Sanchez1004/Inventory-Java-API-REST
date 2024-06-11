@@ -1,8 +1,8 @@
-package com.cesar.apirest.apirest.controller;
+package com.cesar.apirest.apirest.item.controller;
 
-import com.cesar.apirest.apirest.entity.ItemEntity;
-import com.cesar.apirest.apirest.exception.ItemException;
-import com.cesar.apirest.apirest.service.ItemService;
+import com.cesar.apirest.apirest.item.entity.ItemEntity;
+import com.cesar.apirest.apirest.item.exception.ItemException;
+import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,13 +104,12 @@ public class ItemController {
      * @throws ResponseStatusException if an error occurs while deleting the item.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         try {
-            if (itemService.deleteItemById(id)) {
-                return ResponseEntity.ok("Item deleted successfully");
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found with id " + id);
-            }
+            itemService.deleteItemById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (ItemException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found with id " + id, e);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while deleting the item", e);
         }

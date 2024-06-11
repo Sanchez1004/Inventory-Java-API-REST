@@ -1,6 +1,10 @@
-package com.cesar.apirest.apirest.user2.auth;
+package com.cesar.apirest.apirest.auth;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
@@ -8,6 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
-    String userName;
-    String password;
+    private String email;
+    private String password;
 }

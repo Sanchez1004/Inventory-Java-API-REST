@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.entity;
+package com.cesar.apirest.apirest.item.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;

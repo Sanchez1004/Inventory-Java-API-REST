@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.exception;
+package com.cesar.apirest.apirest.item.exception;
 
 /**
  * Custom exception class for handling specific exceptions related to items.

@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.user2.auth;
+package com.cesar.apirest.apirest.auth;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    String token;
+    private String token;
 }

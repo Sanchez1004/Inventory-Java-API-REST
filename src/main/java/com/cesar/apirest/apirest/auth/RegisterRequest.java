@@ -1,6 +1,10 @@
-package com.cesar.apirest.apirest.user2.auth;
+package com.cesar.apirest.apirest.auth;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Setter
 @Getter
@@ -8,9 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    String userName;
-    String password;
-    String firstName;
-    String lastName;
-    String country;
+    private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String country;
 }

@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.user2.demo;
+package com.cesar.apirest.apirest.demo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

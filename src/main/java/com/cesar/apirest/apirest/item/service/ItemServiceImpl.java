@@ -1,8 +1,8 @@
-package com.cesar.apirest.apirest.service;
+package com.cesar.apirest.apirest.item.service;
 
-import com.cesar.apirest.apirest.entity.ItemEntity;
-import com.cesar.apirest.apirest.exception.ItemException;
-import com.cesar.apirest.apirest.repository.ItemRepository;
+import com.cesar.apirest.apirest.item.entity.ItemEntity;
+import com.cesar.apirest.apirest.item.exception.ItemException;
+import com.cesar.apirest.apirest.item.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,11 +79,10 @@ public class ItemServiceImpl implements ItemService {
      * Deletes an item by its ID.
      *
      * @param id The ID of the item to be deleted.
-     * @return True if the item was successfully deleted, otherwise false.
      */
     @Override
-    public boolean deleteItemById(Long id) {
-        itemRepository.deleteById(id);
-        return true;
+    public void deleteItemById(Long id) {
+        ItemEntity itemToDelete = getItemById(id);
+        itemRepository.deleteById(itemToDelete.getId());
     }
 }

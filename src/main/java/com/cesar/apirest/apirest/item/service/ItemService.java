@@ -1,6 +1,6 @@
-package com.cesar.apirest.apirest.service;
+package com.cesar.apirest.apirest.item.service;
 
-import com.cesar.apirest.apirest.entity.ItemEntity;
+import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import java.util.List;
 
 public interface ItemService {
@@ -8,5 +8,5 @@ public interface ItemService {
     ItemEntity getItemById(Long id);
     ItemEntity createItem(ItemEntity item);
     ItemEntity updateItem(Long id, ItemEntity item);
-    boolean deleteItemById(Long id);
+    void deleteItemById(Long id);
 }

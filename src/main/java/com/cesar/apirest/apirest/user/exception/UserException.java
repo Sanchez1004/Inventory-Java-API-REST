@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.user2.exception;
+package com.cesar.apirest.apirest.user.exception;
 
 public class UserException extends RuntimeException {
     public UserException(String message) {
