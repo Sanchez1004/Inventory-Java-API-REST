@@ -1,9 +1,9 @@
-package com.cesar.apirest.apirest.auth.controller;
+package com.cesar.apirest.apirest.user.auth.controller;
 
-import com.cesar.apirest.apirest.auth.AuthResponse;
-import com.cesar.apirest.apirest.auth.LoginRequest;
-import com.cesar.apirest.apirest.auth.RegisterRequest;
-import com.cesar.apirest.apirest.auth.service.AuthService;
+import com.cesar.apirest.apirest.user.auth.AuthResponse;
+import com.cesar.apirest.apirest.user.auth.LoginRequest;
+import com.cesar.apirest.apirest.user.auth.RegisterRequest;
+import com.cesar.apirest.apirest.user.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

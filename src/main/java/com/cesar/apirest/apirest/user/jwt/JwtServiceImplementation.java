@@ -1,9 +1,7 @@
-package com.cesar.apirest.apirest.jwt;
+package com.cesar.apirest.apirest.user.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -11,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,10 +32,6 @@ public class JwtServiceImplementation implements JwtService {
         return getToken(new HashMap<>(), user);
     }
 
-    @Override
-    public String getEmailFromToken(String token) {
-        return getClaim(token, Claims::getSubject);
-    }
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -48,15 +42,20 @@ public class JwtServiceImplementation implements JwtService {
     private Claims getAllClaims(String token) {
         return Jwts
                 .parser()
-                .setSigningKey(getKey())
+                .verifyWith(getKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    @Override
+    public String getEmailFromToken(String token) {
+        return getClaim(token, Claims::getSubject);
     }
 
     private Date getExpirationDate(String token) {
@@ -69,15 +68,15 @@ public class JwtServiceImplementation implements JwtService {
 
     private String getToken(Map<String, Object> extractClaims, UserDetails user) {
         return builder()
-                .setClaims(extractClaims)
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .claims(extractClaims)
+                .subject(user.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
+                .signWith(getKey())
                 .compact();
     }
 
-    private Key getKey() {
+    private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

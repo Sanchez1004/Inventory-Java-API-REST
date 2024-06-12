@@ -97,7 +97,11 @@
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
-                    <excludes>/mapper//*</excludes>
+                    <excludes>/mapper/**</excludes>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <testSourceDirectories>
+                        <testSourceDirectory>src/test/java</testSourceDirectory>
+                    </testSourceDirectories>
                 </configuration>
                 <executions>
                     <execution>

@@ -26,7 +26,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "userDetails", uniqueConstraints = @UniqueConstraint(columnNames = ("email")))
+@Table(name = "user_details", uniqueConstraints = @UniqueConstraint(columnNames = ("email")))
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,24 +49,8 @@ public class UserEntity implements UserDetails {
         return email;
     }
 
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

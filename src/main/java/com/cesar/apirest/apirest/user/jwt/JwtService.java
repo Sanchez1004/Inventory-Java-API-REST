@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.jwt;
+package com.cesar.apirest.apirest.user.jwt;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;

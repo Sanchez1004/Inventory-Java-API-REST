@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.config;
+package com.cesar.apirest.apirest.user.config;
 
 import com.cesar.apirest.apirest.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

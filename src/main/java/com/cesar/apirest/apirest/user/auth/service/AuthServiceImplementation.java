@@ -1,9 +1,9 @@
-package com.cesar.apirest.apirest.auth.service;
+package com.cesar.apirest.apirest.user.auth.service;
 
-import com.cesar.apirest.apirest.auth.AuthResponse;
-import com.cesar.apirest.apirest.auth.LoginRequest;
-import com.cesar.apirest.apirest.auth.RegisterRequest;
-import com.cesar.apirest.apirest.jwt.JwtService;
+import com.cesar.apirest.apirest.user.auth.AuthResponse;
+import com.cesar.apirest.apirest.user.auth.LoginRequest;
+import com.cesar.apirest.apirest.user.auth.RegisterRequest;
+import com.cesar.apirest.apirest.user.jwt.JwtService;
 import com.cesar.apirest.apirest.user.Role;
 import com.cesar.apirest.apirest.user.entity.UserEntity;
 import com.cesar.apirest.apirest.user.repository.UserRepository;

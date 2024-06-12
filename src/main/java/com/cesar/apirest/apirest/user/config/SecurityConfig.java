@@ -1,6 +1,6 @@
-package com.cesar.apirest.apirest.config;
+package com.cesar.apirest.apirest.user.config;
 
-import com.cesar.apirest.apirest.jwt.JwtAuthenticationFilter;
+import com.cesar.apirest.apirest.user.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

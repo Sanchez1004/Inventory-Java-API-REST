@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.auth;
+package com.cesar.apirest.apirest.user.auth;
 
 import lombok.Builder;
 import lombok.Getter;
