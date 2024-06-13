@@ -6,14 +6,7 @@ import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -35,9 +28,13 @@ public class ItemController {
      * @throws ResponseStatusException if an error occurs while fetching all items.
      */
     @GetMapping
-    public ResponseEntity<List<ItemEntity>> getAllItems() {
+    public ResponseEntity<List<ItemEntity>> getAllItems(@RequestParam String sortType) {
+        if (!"ASC".equalsIgnoreCase(sortType) && !"DESC".equalsIgnoreCase(sortType)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid sorting option. Valid options are 'ASC' or 'DESC'.");
+        }
+
         try {
-            List<ItemEntity> items = itemService.getAllItems();
+            List<ItemEntity> items = itemService.getAllItems(sortType);
             return ResponseEntity.ok(items);
         } catch (ItemException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while fetching all items", e);

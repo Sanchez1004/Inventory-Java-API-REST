@@ -4,7 +4,7 @@ import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import java.util.List;
 
 public interface ItemService {
-    List<ItemEntity> getAllItems();
+    List<ItemEntity> getAllItems(String sortType);
     ItemEntity getItemById(Long id);
     ItemEntity createItem(ItemEntity item);
     ItemEntity updateItem(Long id, ItemEntity item);

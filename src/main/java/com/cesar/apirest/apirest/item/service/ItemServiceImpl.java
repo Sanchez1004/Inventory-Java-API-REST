@@ -3,6 +3,7 @@ package com.cesar.apirest.apirest.item.service;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.exception.ItemException;
 import com.cesar.apirest.apirest.item.repository.ItemRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +32,21 @@ public class ItemServiceImpl implements ItemService {
      * @return A list of all ItemEntity objects.
      */
     @Override
-    public List<ItemEntity> getAllItems() {
-        return itemRepository.findAll();
+    public List<ItemEntity> getAllItems(String sortType) {
+        Sort.Direction direction = getSortDirection(sortType);
+        Sort sort = Sort.by(direction, "id");
+        return itemRepository.findAll(sort);
+    }
+
+    private Sort.Direction getSortDirection(String sortType) {
+        if ("ASC".equalsIgnoreCase(sortType)) {
+            return Sort.Direction.ASC;
+        } else if ("DESC".equalsIgnoreCase(sortType)) {
+            return Sort.Direction.DESC;
+        } else {
+            // Default to ASC if sortType is not recognized
+            return Sort.Direction.ASC;
+        }
     }
 
     /**
@@ -69,9 +83,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
         ItemEntity existingItem = getItemById(id);
-        existingItem.setName(newItemDetails.getName());
-        existingItem.setDescription(newItemDetails.getDescription());
-        existingItem.setPrice(newItemDetails.getPrice());
+        existingItem = ItemEntity
+                .builder()
+                .id(existingItem.getId())
+                .name(newItemDetails.getName())
+                .description(newItemDetails.getDescription())
+                .price(newItemDetails.getPrice())
+                .quantity(newItemDetails.getQuantity())
+                .build();
         return itemRepository.save(existingItem);
     }
 

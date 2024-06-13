@@ -1,5 +1,6 @@
 package com.cesar.apirest.apirest.user.jwt;
 
+import com.cesar.apirest.apirest.user.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -26,12 +27,6 @@ public class JwtServiceImplementation implements JwtService {
     private String secretKey;
 
     private static final long TOKEN_VALIDITY = Duration.ofDays(1).toMillis();
-
-    @Override
-    public String getToken(UserDetails user) {
-        return getToken(new HashMap<>(), user);
-    }
-
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -66,9 +61,16 @@ public class JwtServiceImplementation implements JwtService {
         return getExpirationDate(token).before(new Date());
     }
 
-    private String getToken(Map<String, Object> extractClaims, UserDetails user) {
+    @Override
+    public String getToken(UserEntity user) {
+        return getToken(new HashMap<>(), user);
+    }
+
+    private String getToken(Map<String, Object> extraClaims, UserEntity user) {
         return builder()
-                .claims(extractClaims)
+                .claims(extraClaims)
+                .claim("userId", user.getId())
+                .claim("ROLE", user.getRole())
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))

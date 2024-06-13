@@ -1,22 +1,33 @@
 package com.cesar.apirest.apirest.item.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.cesar.apirest.apirest.order.OrderEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity(name = "ITEM")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
     private double price;
+    private int quantity;
+    @ManyToMany
+    private List<OrderEntity> orders;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
 }

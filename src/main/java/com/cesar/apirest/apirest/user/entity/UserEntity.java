@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.user.entity;
 
-import com.cesar.apirest.apirest.user.Role;
+import com.cesar.apirest.apirest.user.utils.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

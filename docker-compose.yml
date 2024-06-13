@@ -1,15 +1,29 @@
-# Use postgres/example user/password credentials
-version: '3.9'
+version: '3.8'
 
 services:
   postgres:
     image: postgres:latest
-    restart: always
+    container_name: postgres
     environment:
-      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      POSTGRES_DB: ${SPRING_DATASOURCE_DB}
+      - POSTGRES_DB=${SPRING_DATASOURCE_POSTGRES_DB}
+      - POSTGRES_USER=${SPRING_DATASOURCE_POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${SPRING_DATASOURCE_MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${SPRING_DATASOURCE_MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  postgres-data:
+  mongo-data:
