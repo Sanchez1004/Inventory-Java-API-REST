@@ -24,10 +24,4 @@ public class ItemEntity {
     private String description;
     private double price;
     private int quantity;
-    @ManyToMany
-    private List<OrderEntity> orders;
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private OrderEntity order;
 }

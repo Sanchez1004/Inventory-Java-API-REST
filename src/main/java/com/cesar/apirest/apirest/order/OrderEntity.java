@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -15,12 +16,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "ORDER")
+@Document(collection = "order")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String clientName;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<ItemEntity> itemOrderList;
+    private List<ItemEntity> itemList;
 }
