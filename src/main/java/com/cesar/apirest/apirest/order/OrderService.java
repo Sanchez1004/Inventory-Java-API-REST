@@ -1,7 +1,5 @@
 package com.cesar.apirest.apirest.order;
 
-import com.cesar.apirest.apirest.item.entity.ItemEntity;
-
 import java.util.Map;
 
 public interface OrderService {

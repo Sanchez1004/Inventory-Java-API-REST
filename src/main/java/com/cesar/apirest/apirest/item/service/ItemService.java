@@ -9,6 +9,6 @@ public interface ItemService {
     ItemEntity getItemById(Long id);
     ItemEntity createItem(ItemEntity item);
     ItemEntity updateItem(Long id, ItemEntity item);
-    boolean itemExistsByName(String name);
     void deleteItemById(Long id);
+    ItemEntity itemExistsByName(String name);
 }

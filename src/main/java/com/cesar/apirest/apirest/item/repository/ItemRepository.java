@@ -12,4 +12,6 @@ public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
     @Query("SELECT i.name FROM ITEM i")
     List<String> findAllItemNames();
+
+    ItemEntity findByName(String name);
 }

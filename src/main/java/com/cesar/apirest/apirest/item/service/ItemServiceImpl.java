@@ -99,9 +99,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean itemExistsByName(String name) {
-        List<String> listOfItems = getListOfItemNames();
-        return listOfItems.contains(name);
+    public ItemEntity itemExistsByName(String name) {
+        ItemEntity item = itemRepository.findByName(name);
+        if (item == null) {
+            throw new ItemException("Item " + name + " not found in ItemRepository");
+        }
+        return item;
     }
 
     /**

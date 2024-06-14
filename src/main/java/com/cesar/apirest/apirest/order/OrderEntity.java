@@ -21,11 +21,7 @@ public class OrderEntity {
     @Id
     private String id;
     private String clientName;
-    private Map<String, Integer> itemMap;
+    private Map<String, Integer> itemList;
     private OrderStatus orderStatus;
     private double total;
-
-    public boolean isListOfItemsEmpty() {
-        return itemMap.isEmpty();
-    }
 }
