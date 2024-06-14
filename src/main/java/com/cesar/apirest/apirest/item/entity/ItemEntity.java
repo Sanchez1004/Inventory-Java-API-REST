@@ -1,14 +1,11 @@
 package com.cesar.apirest.apirest.item.entity;
 
-import com.cesar.apirest.apirest.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity(name = "ITEM")
 @Getter

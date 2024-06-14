@@ -4,7 +4,7 @@ import com.cesar.apirest.apirest.user.DTO.AuthResponse;
 import com.cesar.apirest.apirest.user.DTO.LoginRequest;
 import com.cesar.apirest.apirest.user.DTO.RegisterRequest;
 import com.cesar.apirest.apirest.user.jwt.JwtService;
-import com.cesar.apirest.apirest.user.utils.Role;
+import com.cesar.apirest.apirest.utils.Role;
 import com.cesar.apirest.apirest.user.entity.UserEntity;
 import com.cesar.apirest.apirest.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

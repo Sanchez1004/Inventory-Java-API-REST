@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.user.config;
+package com.cesar.apirest.apirest.config;
 
 import com.cesar.apirest.apirest.user.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/auth/**", "/items", "/items/**")
+                                .requestMatchers("/auth/**", "/orders/**" , "/items/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
