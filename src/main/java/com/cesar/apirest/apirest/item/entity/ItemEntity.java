@@ -1,6 +1,9 @@
     package com.cesar.apirest.apirest.item.entity;
 
-    import jakarta.persistence.*;
+    import jakarta.persistence.Id;
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.GeneratedValue;
+    import jakarta.persistence.GenerationType;
     import lombok.AllArgsConstructor;
     import lombok.NoArgsConstructor;
     import lombok.Builder;
@@ -20,4 +23,6 @@
         private String name;
         private String description;
         private double price;
+
+
     }

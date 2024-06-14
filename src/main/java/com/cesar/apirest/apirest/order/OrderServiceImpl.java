@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = getOrderById(id);
         OrderStatus orderStatus = orderEntity.getOrderStatus();
         String status = orderStatus.toString();
-        if(status.equalsIgnoreCase("pending") || status.equalsIgnoreCase("preparing")) {
+        if (status.equalsIgnoreCase("pending") || status.equalsIgnoreCase("preparing")) {
             orderEntity.setItemList(newItemList);
             return orderRepository.save(orderEntity);
         }

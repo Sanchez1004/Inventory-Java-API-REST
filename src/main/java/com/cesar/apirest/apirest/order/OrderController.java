@@ -14,15 +14,16 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) { this.orderService = orderService; }
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @PostMapping
-    public ResponseEntity<OrderEntity> createOrder (@RequestBody OrderEntity order) {
+    public ResponseEntity<OrderEntity> createOrder(@RequestBody OrderEntity order) {
         try {
             OrderEntity createdOrder = orderService.createOrder(order);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
-        }
-        catch (OrderException e) {
+        } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

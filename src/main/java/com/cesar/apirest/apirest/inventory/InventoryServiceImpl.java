@@ -4,7 +4,7 @@ import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InventoryServiceImpl implements InventoryService{
+public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
 

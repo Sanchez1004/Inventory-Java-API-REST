@@ -87,15 +87,17 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
-        ItemEntity existingItem = getItemById(id);
-        existingItem = ItemEntity
-                .builder()
-                .id(existingItem.getId())
-                .name(newItemDetails.getName())
-                .description(newItemDetails.getDescription())
-                .price(newItemDetails.getPrice())
-                .build();
-        return itemRepository.save(existingItem);
+        if(itemRepository.existsById(id)) {
+            ItemEntity item = ItemEntity
+                    .builder()
+                    .id(id)
+                    .name(newItemDetails.getName())
+                    .description(newItemDetails.getDescription())
+                    .price(newItemDetails.getPrice())
+                    .build();
+            return itemRepository.save(item);
+        }
+        throw new ItemException("Item not found with id: " + id);
     }
 
     @Override
@@ -106,6 +108,7 @@ public class ItemServiceImpl implements ItemService {
         }
         return item;
     }
+
 
     /**
      * Deletes an item by its ID.
