@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.order;
 
 import com.cesar.apirest.apirest.utils.OrderStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Builder;

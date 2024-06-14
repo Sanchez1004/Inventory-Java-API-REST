@@ -38,6 +38,11 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findAll(sort);
     }
 
+    @Override
+    public List<String> getListOfItemNames() {
+        return itemRepository.findAllItemNames();
+    }
+
     private Sort.Direction getSortDirection(String sortType) {
         if ("ASC".equalsIgnoreCase(sortType)) {
             return Sort.Direction.ASC;
@@ -89,9 +94,14 @@ public class ItemServiceImpl implements ItemService {
                 .name(newItemDetails.getName())
                 .description(newItemDetails.getDescription())
                 .price(newItemDetails.getPrice())
-                .quantity(newItemDetails.getQuantity())
                 .build();
         return itemRepository.save(existingItem);
+    }
+
+    @Override
+    public boolean itemExistsByName(String name) {
+        List<String> listOfItems = getListOfItemNames();
+        return listOfItems.contains(name);
     }
 
     /**

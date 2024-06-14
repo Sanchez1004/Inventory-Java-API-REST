@@ -5,8 +5,10 @@ import java.util.List;
 
 public interface ItemService {
     List<ItemEntity> getAllItems(String sortType);
+    List<String> getListOfItemNames();
     ItemEntity getItemById(Long id);
     ItemEntity createItem(ItemEntity item);
     ItemEntity updateItem(Long id, ItemEntity item);
+    boolean itemExistsByName(String name);
     void deleteItemById(Long id);
 }

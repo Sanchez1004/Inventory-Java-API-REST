@@ -1,5 +1,7 @@
 package com.cesar.apirest.apirest.order;
 
+import com.cesar.apirest.apirest.inventory.InventoryService;
+import com.cesar.apirest.apirest.item.service.ItemService;
 import com.cesar.apirest.apirest.utils.OrderStatus;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,13 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ItemService itemService;
+    private final InventoryService inventoryService;
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ItemService itemService, InventoryService inventoryService) {
         this.orderRepository = orderRepository;
+        this.itemService = itemService;
+        this.inventoryService = inventoryService;
     }
 
     @Override
@@ -22,12 +28,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity createOrder(OrderEntity orderEntity) {
-        if(orderEntity.isListOfItemsEmpty()) {
+    public OrderEntity createOrder(OrderEntity order) {
+        Map<String, Integer> itemsOrderList = order.getItemMap();
+
+        if(order.isListOfItemsEmpty()) {
             throw new OrderException("The order must hava at least one item");
         }
+        else if () {}
 
-        return orderRepository.save(orderEntity);
+        return orderRepository.save(order);
     }
 
     @Override
