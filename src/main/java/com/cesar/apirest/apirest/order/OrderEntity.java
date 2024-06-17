@@ -24,4 +24,8 @@ public class OrderEntity {
     private Map<String, Integer> itemList;
     private OrderStatus orderStatus;
     private double total;
+
+    public void addItemList(Map<String, Integer> newItemsList) {
+        itemList.putAll(newItemsList);
+    }
 }

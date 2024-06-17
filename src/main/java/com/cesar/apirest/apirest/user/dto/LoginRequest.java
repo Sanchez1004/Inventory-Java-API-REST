@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.user.DTO;
+package com.cesar.apirest.apirest.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;
