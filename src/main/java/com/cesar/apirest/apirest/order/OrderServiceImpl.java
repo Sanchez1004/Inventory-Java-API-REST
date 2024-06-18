@@ -31,6 +31,10 @@ public class OrderServiceImpl implements OrderService {
         return orderOptional.orElseThrow(() -> new OrderException("Order not found with id " + id));
     }
 
+    @Override
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository.findAll();
+    }
 
     @Override
     @Transactional
@@ -66,12 +70,6 @@ public class OrderServiceImpl implements OrderService {
 
         orderToUpdate.addItemList(newItemsList);
         return orderRepository.save(orderToUpdate);
-    }
-
-    @Override
-    public List<OrderEntity> getAllOrders() {
-        return orderRepository
-                .findAll();
     }
 
     private boolean checkItemsAvailability(OrderEntity orderRequest, Map<String, Integer> itemList) {

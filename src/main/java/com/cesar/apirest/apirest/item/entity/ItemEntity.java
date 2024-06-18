@@ -9,6 +9,7 @@
     import lombok.Builder;
     import lombok.Getter;
     import lombok.Setter;
+    import lombok.EqualsAndHashCode;
 
     @Entity(name = "ITEM")
     @Getter
@@ -16,6 +17,7 @@
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    @EqualsAndHashCode
     public class ItemEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,4 @@
         private String name;
         private String description;
         private double price;
-
-
     }

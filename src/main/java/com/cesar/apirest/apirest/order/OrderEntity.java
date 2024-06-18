@@ -1,6 +1,7 @@
 package com.cesar.apirest.apirest.order;
 
 import com.cesar.apirest.apirest.utils.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class OrderEntity {
     @Id
     private String id;
     private String clientName;
+
+    @JsonProperty("itemList")
     private Map<String, Integer> itemList;
     private OrderStatus orderStatus;
     private double total;

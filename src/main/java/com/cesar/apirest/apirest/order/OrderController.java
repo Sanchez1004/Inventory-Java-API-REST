@@ -1,7 +1,6 @@
 package com.cesar.apirest.apirest.order;
 
 import com.cesar.apirest.apirest.exception.OrderException;
-import org.hibernate.query.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,8 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderEntity>> getAllOrders() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrders());
+            List<OrderEntity> orders = orderService.getAllOrders();
+            return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
