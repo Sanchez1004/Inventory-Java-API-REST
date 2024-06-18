@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.exception;
 
 public class InventoryException extends RuntimeException {
     /**

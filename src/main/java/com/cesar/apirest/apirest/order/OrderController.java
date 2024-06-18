@@ -1,12 +1,13 @@
 package com.cesar.apirest.apirest.order;
 
+import com.cesar.apirest.apirest.exception.OrderException;
+import org.hibernate.query.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -16,6 +17,15 @@ public class OrderController {
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderEntity>> getAllOrders() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrders());
+        } catch (OrderException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @PostMapping

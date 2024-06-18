@@ -1,5 +1,6 @@
 package com.cesar.apirest.apirest.order;
 
+import com.cesar.apirest.apirest.exception.OrderException;
 import com.cesar.apirest.apirest.inventory.InventoryService;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
@@ -7,6 +8,7 @@ import com.cesar.apirest.apirest.utils.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,10 +31,13 @@ public class OrderServiceImpl implements OrderService {
         return orderOptional.orElseThrow(() -> new OrderException("Order not found with id " + id));
     }
 
+
     @Override
     @Transactional
     public OrderEntity createOrder(OrderEntity orderRequest) {
-        checkItemsOrderAvailability(orderRequest);
+        if (!checkItemsAvailability(orderRequest, orderRequest.getItemList())) {
+            throw new OrderException("An Error occurred with the item list while creating the order");
+        }
 
         OrderEntity order = OrderEntity
                 .builder()
@@ -45,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-
     @Override
     @Transactional
     public OrderEntity addItemsToOrderById(Map<String, Integer> newItemsList, String id) {
@@ -56,36 +60,38 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderException("Invalid order status, the order it's not available to be modified");
         }
 
-        checkItemsOrderAvailability(orderToUpdate);
+        if (!checkItemsAvailability(orderToUpdate, orderToUpdate.getItemList())) {
+            throw new OrderException("An Error occurred with the item list while creating the order");
+        }
+
         orderToUpdate.addItemList(newItemsList);
         return orderRepository.save(orderToUpdate);
     }
 
     @Override
-    public void checkItemsOrderAvailability(OrderEntity orderRequest) {
-        if (orderRequest.getItemList() == null || orderRequest.getItemList().isEmpty()) {
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository
+                .findAll();
+    }
+
+    private boolean checkItemsAvailability(OrderEntity orderRequest, Map<String, Integer> itemList) {
+        if (itemList.isEmpty()) {
             throw new OrderException("The order does not contain any items.");
         }
 
-        double total = 0.0;
+        double total = orderRequest.getTotal();
 
-        for (Map.Entry<String, Integer> entry : orderRequest.getItemList().entrySet()) {
+        for (Map.Entry<String, Integer> entry : itemList.entrySet()) {
             String itemName = entry.getKey();
             int quantity = entry.getValue();
 
-            ItemEntity itemEntity = itemService.itemExistsByName(itemName);
-            if (itemEntity == null) {
-                throw new OrderException("Item not found: " + itemName);
-            }
-
-            if (!inventoryService.isItemAvailable(itemEntity, quantity)) {
-                throw new OrderException("Insufficient inventory for item: " + itemName);
-            }
-
-            inventoryService.deductItem(itemEntity, quantity);
-            total += itemEntity.getPrice() * quantity;
+            ItemEntity item = itemService.itemExistsByName(itemName);
+            inventoryService.isItemQuantityAvailable(item, quantity);
+            inventoryService.deductItem(item, quantity);
+            total += item.getPrice() * quantity;
         }
 
         orderRequest.setTotal(total);
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.item.controller;
 
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
-import com.cesar.apirest.apirest.item.exception.ItemException;
+import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

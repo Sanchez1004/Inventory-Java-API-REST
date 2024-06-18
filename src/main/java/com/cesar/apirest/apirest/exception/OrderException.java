@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.exception;
 
 public class OrderException extends RuntimeException {
     public OrderException(String message) {

@@ -1,6 +1,5 @@
 package com.cesar.apirest.apirest.exception;
 
-import com.cesar.apirest.apirest.item.exception.ItemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

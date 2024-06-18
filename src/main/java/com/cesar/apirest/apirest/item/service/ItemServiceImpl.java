@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.item.service;
 
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
-import com.cesar.apirest.apirest.item.exception.ItemException;
+import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.item.repository.ItemRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemEntity itemExistsByName(String name) {
         ItemEntity item = itemRepository.findByName(name);
         if (item == null) {
-            throw new ItemException("Item " + name + " not found in ItemRepository");
+            throw new ItemException("Item: " + name + ", not found in item list");
         }
         return item;
     }

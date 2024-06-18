@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.user.controller;
 
 import com.cesar.apirest.apirest.user.entity.UserEntity;
-import com.cesar.apirest.apirest.user.exception.UserException;
+import com.cesar.apirest.apirest.exception.UserException;
 import com.cesar.apirest.apirest.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

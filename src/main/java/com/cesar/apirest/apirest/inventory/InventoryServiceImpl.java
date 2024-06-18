@@ -1,5 +1,7 @@
 package com.cesar.apirest.apirest.inventory;
 
+import com.cesar.apirest.apirest.exception.InventoryException;
+import com.cesar.apirest.apirest.exception.OrderException;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,11 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public boolean isItemAvailable(ItemEntity item, int quantity) {
+    public void isItemQuantityAvailable(ItemEntity item, int quantity) {
         InventoryEntity inventoryEntity = inventoryRepository.findByItemsInventoryKey(item);
-        return inventoryEntity != null && inventoryEntity.getItemsInventory().get(item) >= quantity;
+        if (inventoryEntity == null && inventoryEntity.getItemsInventory().get(item) < quantity) {
+            throw new InventoryException("Insufficient inventory for item: " + item.getName());
+        }
     }
 
     public void deductItem(ItemEntity item, int quantity) throws InventoryException {
