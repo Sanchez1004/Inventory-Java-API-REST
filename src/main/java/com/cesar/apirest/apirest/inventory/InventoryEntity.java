@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Builder
@@ -16,5 +14,10 @@ import java.util.Map;
 public class InventoryEntity {
     @Id
     private String id;
-    private Map<ItemEntity, Integer> itemsInventory;
+    private ItemEntity item;
+    private int quantity;
+
+    public String getItemName() {
+        return item.getName();
+    }
 }

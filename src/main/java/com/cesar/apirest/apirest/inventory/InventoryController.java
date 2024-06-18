@@ -20,9 +20,9 @@ public class InventoryController {
     }
 
     @PostMapping
-    ResponseEntity<InventoryEntity> createItemInInventory(@RequestBody ItemQuantityRequest itemRequest) {
+    ResponseEntity<InventoryEntity> createItemInInventory(@RequestBody InventoryEntity inventoryRequest) {
         try {
-            InventoryEntity response = inventoryService.createItemInInventory(itemRequest);
+            InventoryEntity response = inventoryService.createItemInInventory(inventoryRequest);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (InventoryException e) {
             return ResponseEntity.badRequest().body(null);

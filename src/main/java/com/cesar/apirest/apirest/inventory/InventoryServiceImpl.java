@@ -5,9 +5,6 @@ import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
@@ -22,32 +19,34 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public void isItemQuantityAvailable(ItemEntity item, int quantity) {
-        InventoryEntity inventoryEntity = inventoryRepository.findByItemsInventoryKey(item);
+        InventoryEntity inventoryEntity = inventoryRepository.findByItemEntity(item);
 
         if (inventoryEntity == null) {
             throw new InventoryException("Item not found in inventory: " + item.getName());
         }
 
-        Integer availableQuantity = inventoryEntity.getItemsInventory().get(item);
-        if (availableQuantity == null || availableQuantity < quantity) {
-            throw new InventoryException("Insufficient inventory for item: " + item.getName());
+        if (inventoryEntity.getQuantity() == 0 || inventoryEntity.getQuantity() < quantity) {
+            throw new InventoryException("Insufficient inventory for item: " + inventoryEntity.getItemName());
         }
     }
 
 
     @Override
-    public InventoryEntity createItemInInventory(ItemQuantityRequest itemRequest) {
-        if (itemRequest.getItem() == null) {
+    public InventoryEntity createItemInInventory(InventoryEntity inventoryRequest) {
+        if (inventoryRequest.getItem() == null) {
            throw new InventoryException("The item cannot be empty");
         }
 
-        itemService.createItem(itemRequest.getItem());
-        Map<ItemEntity, Integer> newItem = new HashMap<>();
-        newItem.put(itemRequest.getItem(), itemRequest.getQuantity());
+        if(inventoryRequest.getQuantity() <= 0) {
+            throw new InventoryException("The quantity cannot be 0 o negative");
+        }
+
+        itemService.createItem(inventoryRequest.getItem());
 
         InventoryEntity updatedInventory = InventoryEntity
                 .builder()
-                .itemsInventory(newItem)
+                .quantity(inventoryRequest.getQuantity())
+                .item(inventoryRequest.getItem())
                 .build();
 
         inventoryRepository.save(updatedInventory);
@@ -55,12 +54,12 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     public void deductItem(ItemEntity item, int quantity) throws InventoryException {
-        InventoryEntity inventoryEntity = inventoryRepository.findByItemsInventoryKey(item);
-        if (inventoryEntity == null || inventoryEntity.getItemsInventory().get(item) < quantity) {
+        InventoryEntity inventoryEntity = inventoryRepository.findByItemEntity(item);
+        if (inventoryEntity == null || inventoryEntity.getQuantity() < quantity) {
             throw new InventoryException("Insufficient inventory for item: " + item.getName());
         }
 
-        inventoryEntity.getItemsInventory().put(item, inventoryEntity.getItemsInventory().get(item) - quantity);
+        inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
         inventoryRepository.save(inventoryEntity);
     }
 }
