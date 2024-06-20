@@ -1,5 +1,6 @@
 package com.cesar.apirest.apirest.inventory;
 
+import com.cesar.apirest.apirest.inventory.dto.InventoryDTO;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class InventoryController {
             List<InventoryDTO> itemList = inventoryService.getInventoryByItemNameContaining(name);
             return new ResponseEntity<>(itemList, HttpStatus.OK);
         } catch (InventoryException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);gi
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

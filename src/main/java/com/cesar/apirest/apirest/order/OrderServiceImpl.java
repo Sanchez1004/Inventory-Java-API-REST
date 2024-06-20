@@ -4,6 +4,8 @@ import com.cesar.apirest.apirest.exception.OrderException;
 import com.cesar.apirest.apirest.inventory.InventoryService;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
+import com.cesar.apirest.apirest.order.dto.OrderDTO;
+import com.cesar.apirest.apirest.order.dto.OrderMapper;
 import com.cesar.apirest.apirest.utils.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -11,53 +13,78 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
     private final ItemService itemService;
     private final InventoryService inventoryService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ItemService itemService, InventoryService inventoryService) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ItemService itemService, InventoryService inventoryService) {
         this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
         this.itemService = itemService;
         this.inventoryService = inventoryService;
     }
 
     @Override
-    public OrderEntity getOrderById(String id) {
-        Optional<OrderEntity> orderOptional = orderRepository.getOrderById(id);
-        return orderOptional.orElseThrow(() -> new OrderException("Order not found with id " + id));
+    public OrderDTO getOrderById(String id) {
+        Optional<OrderEntity> entityOrder = orderRepository.getOrderById(id);
+        Optional<OrderDTO> orderDTO = entityOrder.map(orderMapper::toOrderDTO);
+        return orderDTO.orElseThrow(() -> new OrderException("Order not found with id " + id));
+    }
+
+    private OrderEntity getEntityOrderById(String id) {
+        Optional<OrderEntity> order = orderRepository.getOrderById(id);
+        return order.orElseThrow(() -> new OrderException("Order not found with id " + id));
     }
 
     @Override
-    public List<OrderEntity> getAllOrders() {
-        return orderRepository.findAll();
+    public List<OrderDTO> getAllOrders() {
+        List<OrderEntity> orderList = orderRepository.findAll();
+        return orderList.stream()
+                .map(orderMapper::toOrderDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public OrderEntity createOrder(OrderEntity orderRequest) {
-        if (!checkItemsAvailability(orderRequest, orderRequest.getItemList())) {
+    public OrderDTO createOrder(OrderDTO orderDTO) {
+        OrderEntity newOrder = orderMapper.toOrderEntity(orderDTO);
+        if (!checkItemsAvailability(newOrder, newOrder.getItemList())) {
             throw new OrderException("An Error occurred with the item list while creating the order");
         }
 
-        OrderEntity order = OrderEntity
+        OrderEntity orderToCreate = OrderEntity
                 .builder()
-                .clientName(orderRequest.getClientName())
-                .itemList(orderRequest.getItemList())
+                .clientName(newOrder.getClientName())
+                .itemList(newOrder.getItemList())
                 .orderStatus(OrderStatus.PREPARING)
-                .total(orderRequest.getTotal())
+                .total(newOrder.getTotal())
                 .build();
 
-        return orderRepository.save(order);
+        orderRepository.save(orderToCreate);
+        return orderMapper.toOrderDTO(orderToCreate);
     }
 
     @Override
+    public List<OrderDTO> searchOrdersByClientName(String clientName) {
+        if (clientName == null) {
+            throw new OrderException("The client name cannot be empty");
+        }
+
+        List<OrderEntity> listOfOrders = orderRepository.findByClientName(clientName);
+        return listOfOrders.stream().map(orderMapper::toOrderDTO).collect(Collectors.toList());
+    }
+
+
+    @Override
     @Transactional
-    public OrderEntity addItemsToOrderById(Map<String, Integer> newItemsList, String id) {
-        OrderEntity orderToUpdate = getOrderById(id);
+    public OrderDTO addItemsToOrderById(Map<String, Integer> newItemsList, String id) {
+        OrderEntity orderToUpdate = getEntityOrderById(id);
         OrderStatus orderStatus = orderToUpdate.getOrderStatus();
         String status = orderStatus.toString();
         if  (!status.equalsIgnoreCase("pending") && !status.equalsIgnoreCase("preparing")) {
@@ -69,7 +96,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderToUpdate.addItemList(newItemsList);
-        return orderRepository.save(orderToUpdate);
+        orderRepository.save(orderToUpdate);
+        return orderMapper.toOrderDTO(orderToUpdate);
     }
 
     private boolean checkItemsAvailability(OrderEntity orderRequest, Map<String, Integer> itemList) {

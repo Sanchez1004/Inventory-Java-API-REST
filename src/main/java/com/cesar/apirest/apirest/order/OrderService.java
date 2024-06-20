@@ -1,11 +1,14 @@
 package com.cesar.apirest.apirest.order;
 
+import com.cesar.apirest.apirest.order.dto.OrderDTO;
+
 import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
-    OrderEntity getOrderById(String id);
-    List<OrderEntity> getAllOrders();
-    OrderEntity createOrder(OrderEntity orderEntity);
-    OrderEntity addItemsToOrderById(Map<String, Integer> newItemList, String id);
+    OrderDTO getOrderById(String id);
+    List<OrderDTO> getAllOrders();
+    OrderDTO createOrder(OrderDTO orderDTO);
+    List<OrderDTO> searchOrdersByClientName(String clientName);
+    OrderDTO addItemsToOrderById(Map<String, Integer> newItemList, String id);
 }
