@@ -5,6 +5,10 @@ import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
@@ -37,9 +41,13 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public InventoryDTO getInventoryByItemName(String itemName) throws InventoryException {
-        return null;
-    }
+    public List<InventoryDTO> getInventoryByItemNameContaining(String keyword) throws InventoryException {
+        String regex = ".*" + keyword + ".*";
+        List<InventoryEntity> inventoryEntityList = inventoryRepository.findByItemNameRegex(regex);
+        return inventoryEntityList.stream()
+                .map(inventoryMapper::toDTO)
+                .collect(Collectors.toList());}
+
 
     @Override
     public void isItemQuantityAvailable(ItemEntity item, int quantity) throws InventoryException {
