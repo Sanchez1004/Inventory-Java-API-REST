@@ -32,7 +32,7 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public InventoryEntity createItemInInventory(InventoryEntity inventoryRequest) {
+    public InventoryEntity createItemInInventory(InventoryDTO inventoryRequest) {
         if (inventoryRequest.getItem() == null) {
            throw new InventoryException("The item cannot be empty");
         }
