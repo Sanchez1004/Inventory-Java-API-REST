@@ -9,16 +9,40 @@ import org.springframework.stereotype.Service;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
+    private final InventoryMapper inventoryMapper;
     private final ItemService itemService;
 
-    public InventoryServiceImpl(InventoryRepository inventoryRepository, ItemService itemService) {
+    public InventoryServiceImpl(InventoryRepository inventoryRepository, InventoryMapper inventoryMapper, ItemService itemService) {
         this.inventoryRepository = inventoryRepository;
+        this.inventoryMapper = inventoryMapper;
         this.itemService = itemService;
     }
 
+    @Override
+    public InventoryDTO createItemInInventory(InventoryDTO inventoryRequest) {
+        if (inventoryRequest.getItem() == null) {
+            throw new InventoryException("The item cannot be empty");
+        }
+
+        if(inventoryRequest.getQuantity() <= 0) {
+            throw new InventoryException("The quantity cannot be 0 o negative");
+        }
+
+        itemService.createItem(inventoryRequest.getItem());
+
+        InventoryEntity updatedInventory = inventoryMapper.toEntity(inventoryRequest);
+
+        inventoryRepository.save(updatedInventory);
+        return inventoryMapper.toDTO(updatedInventory);
+    }
 
     @Override
-    public void isItemQuantityAvailable(ItemEntity item, int quantity) {
+    public InventoryDTO getInventoryByItemName(String itemName) throws InventoryException {
+        return null;
+    }
+
+    @Override
+    public void isItemQuantityAvailable(ItemEntity item, int quantity) throws InventoryException {
         InventoryEntity inventoryEntity = inventoryRepository.findByItemEntity(item);
 
         if (inventoryEntity == null) {
@@ -30,29 +54,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
     }
 
-
     @Override
-    public InventoryEntity createItemInInventory(InventoryDTO inventoryRequest) {
-        if (inventoryRequest.getItem() == null) {
-           throw new InventoryException("The item cannot be empty");
-        }
-
-        if(inventoryRequest.getQuantity() <= 0) {
-            throw new InventoryException("The quantity cannot be 0 o negative");
-        }
-
-        itemService.createItem(inventoryRequest.getItem());
-
-        InventoryEntity updatedInventory = InventoryEntity
-                .builder()
-                .quantity(inventoryRequest.getQuantity())
-                .item(inventoryRequest.getItem())
-                .build();
-
-        inventoryRepository.save(updatedInventory);
-        return updatedInventory;
-    }
-
     public void deductItem(ItemEntity item, int quantity) throws InventoryException {
         InventoryEntity inventoryEntity = inventoryRepository.findByItemEntity(item);
         if (inventoryEntity == null || inventoryEntity.getQuantity() < quantity) {
