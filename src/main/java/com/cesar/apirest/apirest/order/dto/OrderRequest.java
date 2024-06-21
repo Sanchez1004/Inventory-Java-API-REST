@@ -15,7 +15,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
+public class OrderRequest {
     private String clientName;
     private Map<String, Integer> itemList;
     private OrderStatus orderStatus;

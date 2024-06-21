@@ -1,9 +1,10 @@
 package com.cesar.apirest.apirest.order;
 
 import com.cesar.apirest.apirest.exception.OrderException;
-import com.cesar.apirest.apirest.order.dto.OrderDTO;
+import com.cesar.apirest.apirest.order.dto.OrderRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,50 +28,55 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/list-orders")
+    public ResponseEntity<List<OrderRequest>> getAllOrders() {
         try {
-            List<OrderDTO> orders = orderService.getAllOrders();
+            List<OrderRequest> orders = orderService.getAllOrders();
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
-    @GetMapping("admin/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("admin/find-order/{id}")
+    public ResponseEntity<OrderRequest> getOrderById(@PathVariable String id) {
         try {
-            OrderDTO order = orderService.getOrderById(id);
+            OrderRequest order = orderService.getOrderById(id);
             return new ResponseEntity<>(order, HttpStatus.OK);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
-    @GetMapping("admin/{clientName}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByClientName(@PathVariable String clientName) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("admin/find-order-by-client-name/{clientName}")
+    public ResponseEntity<List<OrderRequest>> getOrdersByClientName(@PathVariable String clientName) {
         try {
-            List<OrderDTO> ordersList = orderService.searchOrdersByClientName(clientName);
+            List<OrderRequest> ordersList = orderService.searchOrdersByClientName(clientName);
             return new ResponseEntity<>(ordersList, HttpStatus.OK);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
-    @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/create-order")
+    public ResponseEntity<OrderRequest> createOrder(@RequestBody OrderRequest orderRequest) {
         try {
-            OrderDTO createdOrder = orderService.createOrder(orderDTO);
+            OrderRequest createdOrder = orderService.createOrder(orderRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
-    @PutMapping
-    public ResponseEntity<OrderDTO> addItemsToOrderById(@RequestBody Map<String, Integer> itemList, @RequestParam String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/update-order-items")
+    public ResponseEntity<OrderRequest> addItemsToOrderById(@RequestBody Map<String, Integer> itemList, @RequestParam String id) {
         try {
-            OrderDTO newOrder = orderService.addItemsToOrderById(itemList, id);
+            OrderRequest newOrder = orderService.addItemsToOrderById(itemList, id);
             return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
         } catch (OrderException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

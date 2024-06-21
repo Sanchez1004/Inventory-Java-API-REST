@@ -4,7 +4,7 @@ import com.cesar.apirest.apirest.exception.OrderException;
 import com.cesar.apirest.apirest.inventory.InventoryService;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
-import com.cesar.apirest.apirest.order.dto.OrderDTO;
+import com.cesar.apirest.apirest.order.dto.OrderRequest;
 import com.cesar.apirest.apirest.order.dto.OrderMapper;
 import com.cesar.apirest.apirest.utils.OrderStatus;
 import jakarta.transaction.Transactional;
@@ -30,9 +30,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(String id) {
+    public OrderRequest getOrderById(String id) {
         Optional<OrderEntity> entityOrder = orderRepository.getOrderById(id);
-        Optional<OrderDTO> orderDTO = entityOrder.map(orderMapper::toOrderDTO);
+        Optional<OrderRequest> orderDTO = entityOrder.map(orderMapper::toOrderDTO);
         return orderDTO.orElseThrow(() -> new OrderException("Order not found with id " + id));
     }
 
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getAllOrders() {
+    public List<OrderRequest> getAllOrders() {
         List<OrderEntity> orderList = orderRepository.findAll();
         return orderList.stream()
                 .map(orderMapper::toOrderDTO)
@@ -51,8 +51,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDTO createOrder(OrderDTO orderDTO) {
-        OrderEntity newOrder = orderMapper.toOrderEntity(orderDTO);
+    public OrderRequest createOrder(OrderRequest orderRequest) {
+        OrderEntity newOrder = orderMapper.toOrderEntity(orderRequest);
         checkItemsAvailability(newOrder, newOrder.getItemList());
 
         OrderEntity orderToCreate = OrderEntity
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> searchOrdersByClientName(String clientName) {
+    public List<OrderRequest> searchOrdersByClientName(String clientName) {
         if (clientName == null) {
             throw new OrderException("The client name cannot be empty");
         }
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDTO addItemsToOrderById(Map<String, Integer> newItemsList, String id) {
+    public OrderRequest addItemsToOrderById(Map<String, Integer> newItemsList, String id) {
         OrderEntity orderToUpdate = getEntityOrderById(id);
         OrderStatus orderStatus = orderToUpdate.getOrderStatus();
         String status = orderStatus.toString();

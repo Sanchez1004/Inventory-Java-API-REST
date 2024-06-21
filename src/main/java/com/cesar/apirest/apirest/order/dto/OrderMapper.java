@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
-    public OrderDTO toOrderDTO(OrderEntity orderEntity) {
-        return OrderDTO
+    public OrderRequest toOrderDTO(OrderEntity orderEntity) {
+        return OrderRequest
                 .builder()
                 .clientName(orderEntity.getClientName())
                 .itemList(orderEntity.getItemList())
@@ -16,13 +16,13 @@ public class OrderMapper {
                 .build();
     }
 
-    public OrderEntity toOrderEntity(OrderDTO orderDTO) {
+    public OrderEntity toOrderEntity(OrderRequest orderRequest) {
         return OrderEntity
                 .builder()
-                .clientName(orderDTO.getClientName())
-                .itemList(orderDTO.getItemList())
-                .orderStatus(orderDTO.getOrderStatus())
-                .total(orderDTO.getTotal())
+                .clientName(orderRequest.getClientName())
+                .itemList(orderRequest.getItemList())
+                .orderStatus(orderRequest.getOrderStatus())
+                .total(orderRequest.getTotal())
                 .build();
     }
 }

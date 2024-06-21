@@ -5,6 +5,7 @@ import com.cesar.apirest.apirest.item.ItemRequest;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,8 @@ public class ItemController {
      * @return ResponseEntity containing a list of ItemEntity objects.
      * @throws ResponseStatusException if an error occurs while fetching all items.
      */
-    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/user/get-items")
     public ResponseEntity<List<ItemRequest>> getAllItems(@RequestParam String sortType) {
         if (!"ASC".equalsIgnoreCase(sortType) && !"DESC".equalsIgnoreCase(sortType)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid sorting option. Valid options are 'ASC' or 'DESC'.");
@@ -55,7 +57,8 @@ public class ItemController {
      * @return ResponseEntity containing the retrieved ItemEntity.
      * @throws ResponseStatusException if the item with the given ID is not found.
      */
-    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/user/get-item/{id}")
     public ResponseEntity<ItemRequest> getItemById(@PathVariable Long id) {
         try {
             ItemRequest item = itemService.findItemById(id);
@@ -72,7 +75,8 @@ public class ItemController {
      * @return ResponseEntity containing the created ItemEntity.
      * @throws ResponseStatusException if an error occurs while creating the item.
      */
-    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/create-item")
     public ResponseEntity<ItemRequest> createItem(@RequestBody ItemRequest itemRequest) {
         try {
             ItemRequest createdItem = itemService.createItem(itemRequest);
@@ -90,7 +94,8 @@ public class ItemController {
      * @return ResponseEntity containing the updated ItemEntity.
      * @throws ResponseStatusException if the item with the given ID is not found.
      */
-    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/update-item/{id}")
     public ResponseEntity<ItemRequest> updateItem(@PathVariable Long id, @RequestBody ItemRequest newItemDetails) {
         try {
             ItemRequest updatedItem = itemService.updateItem(id, newItemDetails);
@@ -107,7 +112,8 @@ public class ItemController {
      * @return ResponseEntity indicating success or failure of the deletion operation.
      * @throws ResponseStatusException if an error occurs while deleting the item.
      */
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/delete-item/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         try {
             itemService.deleteItemById(id);
