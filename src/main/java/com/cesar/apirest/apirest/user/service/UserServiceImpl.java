@@ -7,6 +7,8 @@
     import com.cesar.apirest.apirest.user.entity.UserEntity;
     import com.cesar.apirest.apirest.user.repository.UserRepository;
     import com.cesar.apirest.apirest.utils.UserField;
+    import org.springframework.security.core.Authentication;
+    import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
 
@@ -76,13 +78,20 @@
                 throw new UserException("User request cannot be null");
             }
 
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userRole = authentication.getAuthorities().stream().findFirst().orElseThrow().getAuthority();
+
             UserEntity userEntity = getUserById(id);
 
             for (Map.Entry<UserField, BiConsumer<UserEntity, UserRequest>> entry : updateFieldMap.entrySet()) {
+                if (entry.getKey() == UserField.ROLE && !userRole.equals("ROLE_ADMIN")) {
+                    continue;
+                }
                 entry.getValue().accept(userEntity, userRequest);
             }
 
             userRepository.save(userEntity);
             return userMapper.toUserDTO(userEntity);
         }
+
     }

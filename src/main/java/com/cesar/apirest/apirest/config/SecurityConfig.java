@@ -12,6 +12,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration class for security settings in the API.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -20,6 +23,13 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    /**
+     * Configures security filters for HTTP requests.
+     *
+     * @param http HttpSecurity object for configuring security settings.
+     * @return SecurityFilterChain object defining the security filter chain.
+     * @throws Exception If an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain authSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -27,8 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/inventory/admin/**", "/users/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/inventory/user/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers("/inventory/admin/**", "/users/admin/**", "/items/admin/**", "/orders/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/inventory/user/**", "/users/user/**", "/items/user/**", "/orders/users/**").hasAnyRole("ADMIN", "USER")
                                 .anyRequest()
                                 .authenticated()
                 )

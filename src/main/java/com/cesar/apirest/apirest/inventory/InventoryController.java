@@ -26,8 +26,8 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PostMapping("/user/create")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("/admin/create")
     ResponseEntity<InventoryRequest> createItemInInventory(@RequestBody InventoryRequest inventoryRequest) {
         try {
             InventoryRequest response = inventoryService.createItemInInventory(inventoryRequest);
@@ -37,6 +37,7 @@ public class InventoryController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     ResponseEntity<List<InventoryRequest>> findItemInInventoryByNameContaining(@RequestParam String name) {
         try {
