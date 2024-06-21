@@ -7,7 +7,9 @@ import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import java.util.List;
 
 public interface InventoryService {
+    InventoryDTO getInventoryItemById(String id);
     InventoryDTO createItemInInventory(InventoryDTO itemRequest);
+    InventoryDTO addStockToItemById(String id, int quantity);
     List<InventoryDTO> getInventoryByItemNameContaining(String keyword) throws InventoryException;
     void deductItem(ItemEntity item, int quantity) throws InventoryException;
     void isItemQuantityAvailable(ItemEntity item, int quantity) throws InventoryException;

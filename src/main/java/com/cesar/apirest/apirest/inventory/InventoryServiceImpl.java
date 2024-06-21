@@ -8,6 +8,7 @@ import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +22,13 @@ public class InventoryServiceImpl implements InventoryService {
         this.inventoryRepository = inventoryRepository;
         this.inventoryMapper = inventoryMapper;
         this.itemService = itemService;
+    }
+
+    @Override
+    public InventoryDTO getInventoryItemById(String id) {
+        Optional<InventoryEntity> inventoryEntity = inventoryRepository.findById(id);
+        Optional<InventoryDTO> inventoryDTO = inventoryEntity.map(inventoryMapper::toDTO);
+        return inventoryDTO.orElseThrow(() -> new InventoryException("Item not found with id: " + id));
     }
 
     @Override
@@ -39,6 +47,18 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventoryRepository.save(updatedInventory);
         return inventoryMapper.toDTO(updatedInventory);
+    }
+
+    @Override
+    public InventoryDTO addStockToItemById(String id, int quantity) {
+        InventoryDTO inventoryDTO = getInventoryItemById(id);
+        if (quantity <= 0) {
+            throw new InventoryException("Quantity cannot be negative o zero");
+        }
+
+        inventoryDTO.setQuantity(quantity);
+        inventoryRepository.save(inventoryMapper.toEntity(inventoryDTO));
+        return inventoryDTO;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.cesar.apirest.apirest.inventory.dto.InventoryDTO;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,8 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PostMapping("/user/create")
     ResponseEntity<InventoryDTO> createItemInInventory(@RequestBody InventoryDTO inventoryRequest) {
         try {
             InventoryDTO response = inventoryService.createItemInInventory(inventoryRequest);

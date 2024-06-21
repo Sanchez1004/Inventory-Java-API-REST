@@ -37,7 +37,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("admin/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id) {
         try {
             OrderDTO order = orderService.getOrderById(id);
@@ -47,7 +47,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/client")
+    @GetMapping("admin/{clientName}")
     public ResponseEntity<List<OrderDTO>> getOrdersByClientName(@RequestParam String clientName) {
         try {
             List<OrderDTO> ordersList = orderService.searchOrdersByClientName(clientName);

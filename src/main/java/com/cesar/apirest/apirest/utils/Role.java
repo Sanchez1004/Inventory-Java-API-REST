@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.utils;
 
 public enum Role {
-    ADMIN,
-    USER
+    ROLE_ADMIN,
+    ROLE_USER
 }
