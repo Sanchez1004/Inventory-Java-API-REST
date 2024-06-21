@@ -1,13 +1,7 @@
 package com.cesar.apirest.apirest.user.entity;
 
 import com.cesar.apirest.apirest.utils.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +31,8 @@ public class UserEntity implements UserDetails {
     private String firstName;
     private String lastName;
     private String country;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override

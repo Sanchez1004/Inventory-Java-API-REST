@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryDTO {
+public class InventoryRequest {
     private ItemEntity item;
     private int quantity;
 }

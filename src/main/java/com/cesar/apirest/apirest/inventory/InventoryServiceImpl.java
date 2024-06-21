@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.inventory;
 
-import com.cesar.apirest.apirest.inventory.dto.InventoryDTO;
+import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import com.cesar.apirest.apirest.inventory.dto.InventoryMapper;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
@@ -25,14 +25,14 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public InventoryDTO getInventoryItemById(String id) {
+    public InventoryRequest getInventoryItemById(String id) {
         Optional<InventoryEntity> inventoryEntity = inventoryRepository.findById(id);
-        Optional<InventoryDTO> inventoryDTO = inventoryEntity.map(inventoryMapper::toDTO);
+        Optional<InventoryRequest> inventoryDTO = inventoryEntity.map(inventoryMapper::toDTO);
         return inventoryDTO.orElseThrow(() -> new InventoryException("Item not found with id: " + id));
     }
 
     @Override
-    public InventoryDTO createItemInInventory(InventoryDTO inventoryRequest) {
+    public InventoryRequest createItemInInventory(InventoryRequest inventoryRequest) {
         if (inventoryRequest.getItem() == null) {
             throw new InventoryException("The item cannot be empty");
         }
@@ -50,19 +50,19 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public InventoryDTO addStockToItemById(String id, int quantity) {
-        InventoryDTO inventoryDTO = getInventoryItemById(id);
+    public InventoryRequest addStockToItemById(String id, int quantity) {
+        InventoryRequest inventoryRequest = getInventoryItemById(id);
         if (quantity <= 0) {
             throw new InventoryException("Quantity cannot be negative o zero");
         }
 
-        inventoryDTO.setQuantity(quantity);
-        inventoryRepository.save(inventoryMapper.toEntity(inventoryDTO));
-        return inventoryDTO;
+        inventoryRequest.setQuantity(quantity);
+        inventoryRepository.save(inventoryMapper.toEntity(inventoryRequest));
+        return inventoryRequest;
     }
 
     @Override
-    public List<InventoryDTO> getInventoryByItemNameContaining(String keyword) throws InventoryException {
+    public List<InventoryRequest> getInventoryByItemNameContaining(String keyword) throws InventoryException {
         String regex = ".*" + keyword + ".*";
         List<InventoryEntity> inventoryEntityList = inventoryRepository.findByItemNameRegex(regex);
         return inventoryEntityList.stream()

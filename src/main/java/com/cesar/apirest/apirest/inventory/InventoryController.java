@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.inventory;
 
-import com.cesar.apirest.apirest.inventory.dto.InventoryDTO;
+import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class InventoryController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/user/create")
-    ResponseEntity<InventoryDTO> createItemInInventory(@RequestBody InventoryDTO inventoryRequest) {
+    ResponseEntity<InventoryRequest> createItemInInventory(@RequestBody InventoryRequest inventoryRequest) {
         try {
-            InventoryDTO response = inventoryService.createItemInInventory(inventoryRequest);
+            InventoryRequest response = inventoryService.createItemInInventory(inventoryRequest);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (InventoryException e) {
             return ResponseEntity.badRequest().body(null);
@@ -38,9 +38,9 @@ public class InventoryController {
     }
 
     @GetMapping
-    ResponseEntity<List<InventoryDTO>> findItemInInventoryByNameContaining(@RequestParam String name) {
+    ResponseEntity<List<InventoryRequest>> findItemInInventoryByNameContaining(@RequestParam String name) {
         try {
-            List<InventoryDTO> itemList = inventoryService.getInventoryByItemNameContaining(name);
+            List<InventoryRequest> itemList = inventoryService.getInventoryByItemNameContaining(name);
             return new ResponseEntity<>(itemList, HttpStatus.OK);
         } catch (InventoryException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
