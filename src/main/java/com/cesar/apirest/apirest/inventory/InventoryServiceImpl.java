@@ -29,7 +29,7 @@ public class InventoryServiceImpl implements InventoryService {
             throw new InventoryException("The item cannot be empty");
         }
 
-        if(inventoryRequest.getQuantity() <= 0) {
+        if (inventoryRequest.getQuantity() <= 0) {
             throw new InventoryException("The quantity cannot be 0 o negative");
         }
 
@@ -47,7 +47,8 @@ public class InventoryServiceImpl implements InventoryService {
         List<InventoryEntity> inventoryEntityList = inventoryRepository.findByItemNameRegex(regex);
         return inventoryEntityList.stream()
                 .map(inventoryMapper::toDTO)
-                .collect(Collectors.toList());}
+                .collect(Collectors.toList());
+    }
 
 
     @Override

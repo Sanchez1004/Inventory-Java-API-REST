@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InventoryDTO {
-    ItemEntity item;
-    int quantity;
+    private ItemEntity item;
+    private int quantity;
 }

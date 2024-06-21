@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -36,8 +37,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<OrderDTO> getOrderById(@RequestParam String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id) {
         try {
             OrderDTO order = orderService.getOrderById(id);
             return new ResponseEntity<>(order, HttpStatus.OK);
@@ -46,7 +47,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/client")
     public ResponseEntity<List<OrderDTO>> getOrdersByClientName(@RequestParam String clientName) {
         try {
             List<OrderDTO> ordersList = orderService.searchOrdersByClientName(clientName);

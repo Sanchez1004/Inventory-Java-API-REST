@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
-        if(itemRepository.existsById(id)) {
+        if (itemRepository.existsById(id)) {
             ItemEntity item = ItemEntity
                     .builder()
                     .id(id)
