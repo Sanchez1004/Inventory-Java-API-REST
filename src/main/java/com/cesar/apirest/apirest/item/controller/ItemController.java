@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.item.controller;
 
-import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.exception.ItemException;
+import com.cesar.apirest.apirest.item.ItemRequest;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +35,13 @@ public class ItemController {
      * @throws ResponseStatusException if an error occurs while fetching all items.
      */
     @GetMapping
-    public ResponseEntity<List<ItemEntity>> getAllItems(@RequestParam String sortType) {
+    public ResponseEntity<List<ItemRequest>> getAllItems(@RequestParam String sortType) {
         if (!"ASC".equalsIgnoreCase(sortType) && !"DESC".equalsIgnoreCase(sortType)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid sorting option. Valid options are 'ASC' or 'DESC'.");
         }
 
         try {
-            List<ItemEntity> items = itemService.getAllItems(sortType);
+            List<ItemRequest> items = itemService.getAllItems(sortType);
             return ResponseEntity.ok(items);
         } catch (ItemException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while fetching all items", e);
@@ -56,9 +56,9 @@ public class ItemController {
      * @throws ResponseStatusException if the item with the given ID is not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ItemEntity> getItemById(@PathVariable Long id) {
+    public ResponseEntity<ItemRequest> getItemById(@PathVariable Long id) {
         try {
-            ItemEntity item = itemService.getItemById(id);
+            ItemRequest item = itemService.findItemById(id);
             return ResponseEntity.ok(item);
         } catch (ItemException e) {
             return ResponseEntity.notFound().build();
@@ -68,14 +68,14 @@ public class ItemController {
     /**
      * Creates a new item.
      *
-     * @param item The ItemEntity representing the item to be created.
+     * @param itemRequest The ItemEntity representing the item to be created.
      * @return ResponseEntity containing the created ItemEntity.
      * @throws ResponseStatusException if an error occurs while creating the item.
      */
     @PostMapping
-    public ResponseEntity<ItemEntity> createItem(@RequestBody ItemEntity item) {
+    public ResponseEntity<ItemRequest> createItem(@RequestBody ItemRequest itemRequest) {
         try {
-            ItemEntity createdItem = itemService.createItem(item);
+            ItemRequest createdItem = itemService.createItem(itemRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
         } catch (ItemException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to create item", e);
@@ -91,9 +91,9 @@ public class ItemController {
      * @throws ResponseStatusException if the item with the given ID is not found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ItemEntity> updateItem(@PathVariable Long id, @RequestBody ItemEntity newItemDetails) {
+    public ResponseEntity<ItemRequest> updateItem(@PathVariable Long id, @RequestBody ItemRequest newItemDetails) {
         try {
-            ItemEntity updatedItem = itemService.updateItem(id, newItemDetails);
+            ItemRequest updatedItem = itemService.updateItem(id, newItemDetails);
             return ResponseEntity.ok(updatedItem);
         } catch (ItemException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found with id: " + id, e);

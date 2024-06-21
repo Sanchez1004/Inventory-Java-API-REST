@@ -1,5 +1,7 @@
 package com.cesar.apirest.apirest.item.service;
 
+import com.cesar.apirest.apirest.item.ItemMapper;
+import com.cesar.apirest.apirest.item.ItemRequest;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.item.repository.ItemRepository;
@@ -16,14 +18,16 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemMapper itemMapper;
 
     /**
      * Constructs the ItemServiceImpl with the provided ItemRepository.
      *
      * @param itemRepository The repository responsible for data access operations on Item entities.
      */
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, ItemMapper itemMapper) {
         this.itemRepository = itemRepository;
+        this.itemMapper = itemMapper;
     }
 
     /**
@@ -32,10 +36,11 @@ public class ItemServiceImpl implements ItemService {
      * @return A list of all ItemEntity objects.
      */
     @Override
-    public List<ItemEntity> getAllItems(String sortType) {
+    public List<ItemRequest> getAllItems(String sortType) {
         Sort.Direction direction = getSortDirection(sortType);
         Sort sort = Sort.by(direction, "id");
-        return itemRepository.findAll(sort);
+        List<ItemEntity> itemList = itemRepository.findAll(sort);
+        return itemList.stream().map(itemMapper::toItemDTO).toList();
     }
 
     @Override
@@ -61,21 +66,31 @@ public class ItemServiceImpl implements ItemService {
      * @return The ItemEntity with the specified ID.
      */
     @Override
-    public ItemEntity getItemById(Long id) {
-        Optional<ItemEntity> optionalItem = itemRepository.findById(id);
-        return optionalItem.orElseThrow(() -> new ItemException("Item not found with id: " + id));
+    public ItemRequest findItemById(Long id) {
+        Optional<ItemEntity> itemEntity = itemRepository.findById(id);
+        Optional<ItemRequest> itemDTO = itemEntity.map(itemMapper::toItemDTO);
+        return itemDTO.orElseThrow(() -> new ItemException("Item not found with id: " + id));
+    }
+
+    private ItemEntity getItemById(Long id) {
+        return itemRepository.findById(id).orElseThrow(() -> new ItemException("Item not found with id: " + id));
     }
 
 
     /**
      * Creates a new item.
      *
-     * @param item The ItemEntity object representing the item to be created.
+     * @param itemRequest The ItemEntity object representing the item to be created.
      * @return The newly created ItemEntity.
      */
     @Override
-    public ItemEntity createItem(ItemEntity item) {
-        return itemRepository.save(item);
+    public ItemRequest createItem(ItemRequest itemRequest) {
+        if (itemRequest == null) {
+            throw new ItemException("The item cannot be empty");
+        }
+
+        ItemEntity itemEntity = itemMapper.toItemEntity(itemRequest);
+        return itemMapper.toItemDTO(itemRepository.save(itemEntity));
     }
 
     /**
@@ -86,19 +101,22 @@ public class ItemServiceImpl implements ItemService {
      * @return The updated ItemEntity.
      */
     @Override
-    public ItemEntity updateItem(Long id, ItemEntity newItemDetails) {
-        if (itemRepository.existsById(id)) {
-            ItemEntity item = ItemEntity
-                    .builder()
-                    .id(id)
-                    .name(newItemDetails.getName())
-                    .description(newItemDetails.getDescription())
-                    .price(newItemDetails.getPrice())
-                    .build();
-            return itemRepository.save(item);
+    public ItemRequest updateItem(Long id, ItemRequest newItemDetails) {
+        ItemEntity existingItem = getItemById(id);
+
+        if (newItemDetails.getName() != null) {
+            existingItem.setName(newItemDetails.getName());
         }
-        throw new ItemException("Item not found with id: " + id);
+        if (newItemDetails.getDescription() != null) {
+            existingItem.setDescription(newItemDetails.getDescription());
+        }
+        if (newItemDetails.getPrice() != 0) {
+            existingItem.setPrice(newItemDetails.getPrice());
+        }
+
+        return itemMapper.toItemDTO(itemRepository.save(existingItem));
     }
+
 
     @Override
     public ItemEntity itemExistsByName(String name) {

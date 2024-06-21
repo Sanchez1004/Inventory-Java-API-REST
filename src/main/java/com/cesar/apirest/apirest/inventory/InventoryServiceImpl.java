@@ -3,6 +3,7 @@ package com.cesar.apirest.apirest.inventory;
 import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import com.cesar.apirest.apirest.inventory.dto.InventoryMapper;
+import com.cesar.apirest.apirest.item.ItemMapper;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
     private final ItemService itemService;
+    private final ItemMapper itemMapper;
 
-    public InventoryServiceImpl(InventoryRepository inventoryRepository, InventoryMapper inventoryMapper, ItemService itemService) {
+    public InventoryServiceImpl(InventoryRepository inventoryRepository, InventoryMapper inventoryMapper, ItemService itemService, ItemMapper itemMapper) {
         this.inventoryRepository = inventoryRepository;
         this.inventoryMapper = inventoryMapper;
         this.itemService = itemService;
+        this.itemMapper = itemMapper;
     }
 
     @Override
@@ -40,12 +43,11 @@ public class InventoryServiceImpl implements InventoryService {
             throw new InventoryException("The quantity cannot be 0 o negative");
         }
 
-        itemService.createItem(inventoryRequest.getItem());
+        itemService.createItem(itemMapper.toItemDTO(inventoryRequest.getItem()));
 
         InventoryEntity updatedInventory = inventoryMapper.toEntity(inventoryRequest);
 
-        inventoryRepository.save(updatedInventory);
-        return inventoryMapper.toDTO(updatedInventory);
+        return inventoryMapper.toDTO(inventoryRepository.save(updatedInventory));
     }
 
     @Override
