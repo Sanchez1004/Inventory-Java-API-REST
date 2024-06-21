@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -47,16 +46,14 @@ public class OrderServiceImpl implements OrderService {
         List<OrderEntity> orderList = orderRepository.findAll();
         return orderList.stream()
                 .map(orderMapper::toOrderDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
         OrderEntity newOrder = orderMapper.toOrderEntity(orderDTO);
-        if (!checkItemsAvailability(newOrder, newOrder.getItemList())) {
-            throw new OrderException("An Error occurred with the item list while creating the order");
-        }
+        checkItemsAvailability(newOrder, newOrder.getItemList());
 
         OrderEntity orderToCreate = OrderEntity
                 .builder()
@@ -77,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<OrderEntity> listOfOrders = orderRepository.findByClientName(clientName);
-        return listOfOrders.stream().map(orderMapper::toOrderDTO).collect(Collectors.toList());
+        return listOfOrders.stream().map(orderMapper::toOrderDTO).toList();
     }
 
 
@@ -91,16 +88,14 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderException("Invalid order status, the order it's not available to be modified");
         }
 
-        if (!checkItemsAvailability(orderToUpdate, orderToUpdate.getItemList())) {
-            throw new OrderException("An Error occurred with the item list while creating the order");
-        }
+        checkItemsAvailability(orderToUpdate, orderToUpdate.getItemList());
 
         orderToUpdate.addItemList(newItemsList);
         orderRepository.save(orderToUpdate);
         return orderMapper.toOrderDTO(orderToUpdate);
     }
 
-    private boolean checkItemsAvailability(OrderEntity orderRequest, Map<String, Integer> itemList) {
+    private void checkItemsAvailability(OrderEntity orderRequest, Map<String, Integer> itemList) {
         if (itemList.isEmpty()) {
             throw new OrderException("The order does not contain any items.");
         }
@@ -118,6 +113,5 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderRequest.setTotal(total);
-        return false;
     }
 }

@@ -48,7 +48,7 @@ public class OrderController {
     }
 
     @GetMapping("admin/{clientName}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByClientName(@RequestParam String clientName) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByClientName(@PathVariable String clientName) {
         try {
             List<OrderDTO> ordersList = orderService.searchOrdersByClientName(clientName);
             return new ResponseEntity<>(ordersList, HttpStatus.OK);

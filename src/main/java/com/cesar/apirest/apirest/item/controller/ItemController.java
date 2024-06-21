@@ -3,7 +3,6 @@ package com.cesar.apirest.apirest.item.controller;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.item.service.ItemService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    public ItemController(@Qualifier("ItemService") ItemService itemService) {
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 

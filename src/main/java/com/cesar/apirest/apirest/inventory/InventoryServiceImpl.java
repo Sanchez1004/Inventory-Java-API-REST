@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -67,7 +66,7 @@ public class InventoryServiceImpl implements InventoryService {
         List<InventoryEntity> inventoryEntityList = inventoryRepository.findByItemNameRegex(regex);
         return inventoryEntityList.stream()
                 .map(inventoryMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 

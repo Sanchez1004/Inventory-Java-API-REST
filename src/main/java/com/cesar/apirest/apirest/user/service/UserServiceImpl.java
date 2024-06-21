@@ -16,9 +16,8 @@
     import java.util.List;
     import java.util.Map;
     import java.util.function.BiConsumer;
-    import java.util.stream.Collectors;
 
-    @Service("UserService")
+    @Service
     public class UserServiceImpl implements UserService {
 
         private final UserRepository userRepository;
@@ -33,22 +32,34 @@
             this.passwordEncoder = passwordEncoder;
 
             updateFieldMap.put(UserField.FIRST_NAME, (entity, request) -> {
-                if (request.getFirstName() != null) entity.setFirstName(request.getFirstName());
+                if (request.getFirstName() != null) {
+                    entity.setFirstName(request.getFirstName());
+                }
             });
             updateFieldMap.put(UserField.LAST_NAME, (entity, request) -> {
-                if (request.getLastName() != null) entity.setLastName(request.getLastName());
+                if (request.getLastName() != null) {
+                    entity.setLastName(request.getLastName());
+                }
             });
             updateFieldMap.put(UserField.EMAIL, (entity, request) -> {
-                if (request.getEmail() != null) entity.setEmail(request.getEmail());
+                if (request.getEmail() != null) {
+                    entity.setEmail(request.getEmail());
+                }
             });
             updateFieldMap.put(UserField.PASSWORD, (entity, request) -> {
-                if (request.getPassword() != null) entity.setPassword(passwordEncoder.encode(request.getPassword()));
+                if (request.getPassword() != null) {
+                    entity.setPassword(passwordEncoder.encode(request.getPassword()));
+                }
             });
             updateFieldMap.put(UserField.COUNTRY, (entity, request) -> {
-                if (request.getCountry() != null) entity.setCountry(request.getCountry());
+                if (request.getCountry() != null) {
+                    entity.setCountry(request.getCountry());
+                }
             });
             updateFieldMap.put(UserField.ROLE, (entity, request) -> {
-                if (request.getRole() != null) entity.setRole(request.getRole());
+                if (request.getRole() != null) {
+                    entity.setRole(request.getRole());
+                }
             });
         }
 
@@ -59,7 +70,7 @@
         @Override
         public List<UserRequest> getAllUsers() {
             List<UserEntity> userEntityList = userRepository.findAll();
-            return userEntityList.stream().map(userMapper::toUserDTO).collect(Collectors.toList());
+            return userEntityList.stream().map(userMapper::toUserDTO).toList();
         }
 
         @Override
@@ -74,7 +85,7 @@
 
         @Override
         public UserRequest updateUser(UserRequest userRequest, int id) {
-            if(userRequest == null) {
+            if (userRequest == null) {
                 throw new UserException("User request cannot be null");
             }
 

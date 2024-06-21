@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Service implementation for managing Item entities.
  */
-@Service("ItemService")
+@Service
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
