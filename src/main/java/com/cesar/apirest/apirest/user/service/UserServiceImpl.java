@@ -15,6 +15,7 @@
     import java.util.EnumMap;
     import java.util.List;
     import java.util.Map;
+    import java.util.Optional;
     import java.util.function.BiConsumer;
 
     @Service
@@ -75,12 +76,16 @@
 
         @Override
         public UserRequest searchUserById(int id) {
-            return null;
+            Optional<UserEntity> userEntity = userRepository.findById(id);
+            Optional<UserRequest> userDTO = userEntity.map(userMapper::toUserDTO);
+            return userDTO.orElseThrow(() -> new UserException("User not found with id: " + id));
         }
 
         @Override
         public UserRequest searchUserByEmail(String email) {
-            return null;
+            Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+            Optional<UserRequest> userDTO = userEntity.map(userMapper::toUserDTO);
+            return userDTO.orElseThrow(() -> new UserException("User not found with email: " + email));
         }
 
         @Override
@@ -104,5 +109,4 @@
             userRepository.save(userEntity);
             return userMapper.toUserDTO(userEntity);
         }
-
     }
