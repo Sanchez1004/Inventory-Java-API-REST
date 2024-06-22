@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.item.controller;
 
 import com.cesar.apirest.apirest.exception.ItemException;
-import com.cesar.apirest.apirest.item.ItemRequest;
+import com.cesar.apirest.apirest.item.dto.ItemRequest;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +47,25 @@ public class ItemController {
             return ResponseEntity.ok(items);
         } catch (ItemException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while fetching all items", e);
+        }
+    }
+
+    /**
+     * Retrieves the list of names of all items.
+     * This endpoint is accessible only to users with the 'ADMIN' role.
+     *
+     * @return a ResponseEntity containing the list of item names and HTTP status OK
+     * @throws ResponseStatusException if an ItemException occurs during the operation,
+     *                                 with HTTP status BAD_REQUEST
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/list-of-items")
+    public ResponseEntity<List<String>> getAllItemNames() {
+        try {
+            List<String> itemNamesList = itemService.getListOfItemNames();
+            return ResponseEntity.ok(itemNamesList);
+        } catch (ItemException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

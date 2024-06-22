@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.item;
+package com.cesar.apirest.apirest.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

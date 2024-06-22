@@ -18,16 +18,30 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for handling order-related requests.
+ */
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
 
+    /**
+     * Constructor for OrderController.
+     *
+     * @param orderService the service for handling orders
+     */
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
+    /**
+     * Retrieves a list of all orders.
+     * Accessible only to users with the 'ADMIN' role.
+     *
+     * @return a ResponseEntity containing the list of orders and HTTP status OK
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/list-orders")
     public ResponseEntity<List<OrderRequest>> getAllOrders() {
@@ -39,6 +53,13 @@ public class OrderController {
         }
     }
 
+    /**
+     * Retrieves an order by its ID.
+     * Accessible only to users with the 'ADMIN' role.
+     *
+     * @param id the ID of the order
+     * @return a ResponseEntity containing the order and HTTP status OK
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("admin/find-order/{id}")
     public ResponseEntity<OrderRequest> getOrderById(@PathVariable String id) {
@@ -50,6 +71,13 @@ public class OrderController {
         }
     }
 
+    /**
+     * Retrieves orders by the client's name.
+     * Accessible only to users with the 'ADMIN' role.
+     *
+     * @param clientName the name of the client
+     * @return a ResponseEntity containing the list of orders and HTTP status OK
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("admin/find-order-by-client-name/{clientName}")
     public ResponseEntity<List<OrderRequest>> getOrdersByClientName(@PathVariable String clientName) {
@@ -61,6 +89,13 @@ public class OrderController {
         }
     }
 
+    /**
+     * Creates a new order.
+     * Accessible only to users with the 'ADMIN' role.
+     *
+     * @param orderRequest the order request object containing order details
+     * @return a ResponseEntity containing the created order and HTTP status CREATED
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create-order")
     public ResponseEntity<OrderRequest> createOrder(@RequestBody OrderRequest orderRequest) {
@@ -72,6 +107,14 @@ public class OrderController {
         }
     }
 
+    /**
+     * Adds items to an existing order by its ID.
+     * Accessible only to users with the 'ADMIN' role.
+     *
+     * @param itemList the map of items to be added with their quantities
+     * @param id the ID of the order to which items are to be added
+     * @return a ResponseEntity containing the updated order and HTTP status CREATED
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/update-order-items")
     public ResponseEntity<OrderRequest> addItemsToOrderById(@RequestBody Map<String, Integer> itemList, @RequestParam String id) {

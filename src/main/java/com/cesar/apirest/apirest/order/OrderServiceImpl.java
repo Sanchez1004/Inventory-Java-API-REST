@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
             String itemName = entry.getKey();
             int quantity = entry.getValue();
 
-            ItemEntity item = itemService.itemExistsByName(itemName);
+            ItemEntity item = itemService.getItemByName(itemName);
             inventoryService.isItemQuantityAvailable(item, quantity);
             inventoryService.deductItem(item, quantity);
             total += item.getPrice() * quantity;

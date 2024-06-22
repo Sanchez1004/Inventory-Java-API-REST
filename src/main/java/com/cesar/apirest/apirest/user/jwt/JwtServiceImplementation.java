@@ -19,7 +19,9 @@ import java.util.function.Function;
 
 import static io.jsonwebtoken.Jwts.builder;
 
-
+/**
+ * Implementation of the JWT service for token generation and validation.
+ */
 @Service
 public class JwtServiceImplementation implements JwtService {
 
@@ -28,6 +30,13 @@ public class JwtServiceImplementation implements JwtService {
 
     private static final long TOKEN_VALIDITY = Duration.ofDays(1).toMillis();
 
+    /**
+     * Validates if the provided token is valid for the given user details.
+     *
+     * @param token       the JWT token to validate
+     * @param userDetails the UserDetails object representing the user
+     * @return true if the token is valid, false otherwise
+     */
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String email = getEmailFromToken(token);
@@ -48,6 +57,12 @@ public class JwtServiceImplementation implements JwtService {
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Extracts the email from the JWT token.
+     *
+     * @param token the JWT token
+     * @return the email extracted from the token
+     */
     @Override
     public String getEmailFromToken(String token) {
         return getClaim(token, Claims::getSubject);
@@ -61,11 +76,24 @@ public class JwtServiceImplementation implements JwtService {
         return getExpirationDate(token).before(new Date());
     }
 
+    /**
+     * Generates a JWT token for the given user entity.
+     *
+     * @param user the user entity for which to generate the token
+     * @return the JWT token
+     */
     @Override
     public String getToken(UserEntity user) {
         return getToken(new HashMap<>(), user);
     }
 
+    /**
+     * Generates a JWT token with additional claims for the given user entity.
+     *
+     * @param extraClaims additional claims to include in the token
+     * @param user        the user entity for which to generate the token
+     * @return the JWT token with the specified claims
+     */
     private String getToken(Map<String, Object> extraClaims, UserEntity user) {
         return builder()
                 .claims(extraClaims)
@@ -78,6 +106,11 @@ public class JwtServiceImplementation implements JwtService {
                 .compact();
     }
 
+    /**
+     * Retrieves the secret key used for signing JWT tokens.
+     *
+     * @return the secret key used for signing JWT tokens
+     */
     private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

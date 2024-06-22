@@ -1,7 +1,7 @@
 package com.cesar.apirest.apirest.item.service;
 
-import com.cesar.apirest.apirest.item.ItemMapper;
-import com.cesar.apirest.apirest.item.ItemRequest;
+import com.cesar.apirest.apirest.item.dto.ItemMapper;
+import com.cesar.apirest.apirest.item.dto.ItemRequest;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.exception.ItemException;
 import com.cesar.apirest.apirest.item.repository.ItemRepository;
@@ -45,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<String> getListOfItemNames() {
-        return itemRepository.findAllItemNames();
+        return itemRepository.getALlItemNames();
     }
 
     private Sort.Direction getSortDirection(String sortType) {
@@ -117,9 +117,15 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.toItemDTO(itemRepository.save(existingItem));
     }
 
-
+    /**
+     * Retrieves an item entity by its name.
+     *
+     * @param name the name of the item to retrieve
+     * @return the item entity with the specified name
+     * @throws ItemException if the item with the specified name is not found in the item list
+     */
     @Override
-    public ItemEntity itemExistsByName(String name) {
+    public ItemEntity getItemByName(String name) {
         ItemEntity item = itemRepository.findByName(name);
         if (item == null) {
             throw new ItemException("Item: " + name + ", not found in item list");

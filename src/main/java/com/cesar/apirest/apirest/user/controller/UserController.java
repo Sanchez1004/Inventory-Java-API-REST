@@ -16,15 +16,28 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller class for handling user-related endpoints.
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
+    /**
+     * Constructs a new UserController with the given UserService.
+     *
+     * @param userService the UserService to use for user-related operations
+     */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return a ResponseEntity containing the list of users, or an error response if an exception occurs
+     */
     @GetMapping("/admin/list-users")
     public ResponseEntity<List<UserRequest>> getAllUsers() {
         try {
@@ -35,6 +48,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Updates a user's information.
+     *
+     * @param userRequest the updated user information
+     * @param id          the ID of the user to update
+     * @return a ResponseEntity containing the updated user information, or an error response if an exception occurs
+     */
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/admin/update-users/{id}")
     public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable int id) {
