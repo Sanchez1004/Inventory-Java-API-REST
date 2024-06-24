@@ -1,4 +1,4 @@
-# API Rest Portfolio Project
+# API Rest 
 
 This project is a RESTful API built with Java 22, Spring Boot 3.3.0, JPA, Docker, MongoDB, PostgreSQL, and JWT. It is designed to showcase a portfolio application managing four main entities: Order, User, Inventory, and Item. The project uses Maven for dependency management, with Lombok to reduce boilerplate code.
 
@@ -57,7 +57,7 @@ This project is a RESTful API built with Java 22, Spring Boot 3.3.0, JPA, Docker
     git clone https://github.com/Sanchez1004/Inventory-Java-API-REST.git
     cd Inventory-Java-API-REST
     ```
-3. Build the Docker image:
+2. Build the Docker image:
     ````shell
    docker-compose up -d
    ````
@@ -70,8 +70,9 @@ This project is a RESTful API built with Java 22, Spring Boot 3.3.0, JPA, Docker
     ````shell
     mvn spring-boot:run
     ````
-
-## Running the apllication
+    starts the Spring Boot application directly from Maven. 
+    It's handy for running the application during development without the need to package it or deploy it to an external server.
+## Running the application
 
 The application runs locally and uses Docker Compose for the PostgreSQL database.
 Running Locally
@@ -81,7 +82,7 @@ Running with Docker Compose
    
 ### Running With Docker Compose
 1. Start the PostgreSQL service:
-   ```shell
+   ````shell
    docker-compose up -d
    ````   
 2. Build and run the application:

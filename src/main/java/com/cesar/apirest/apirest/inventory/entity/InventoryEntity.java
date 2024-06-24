@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.inventory.entity;
 
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import jakarta.persistence.Id;

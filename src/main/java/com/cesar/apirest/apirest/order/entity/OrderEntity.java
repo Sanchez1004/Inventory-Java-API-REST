@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.order.entity;
 
 import com.cesar.apirest.apirest.utils.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.order.dto;
 
-import com.cesar.apirest.apirest.order.OrderEntity;
+import com.cesar.apirest.apirest.order.entity.OrderEntity;
 import org.springframework.stereotype.Component;
 
 /**

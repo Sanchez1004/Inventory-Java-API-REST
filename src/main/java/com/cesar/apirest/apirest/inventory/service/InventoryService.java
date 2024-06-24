@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.inventory.service;
 
 import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;

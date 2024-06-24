@@ -1,6 +1,6 @@
 package com.cesar.apirest.apirest.inventory.dto;
 
-import com.cesar.apirest.apirest.inventory.InventoryEntity;
+import com.cesar.apirest.apirest.inventory.entity.InventoryEntity;
 import org.springframework.stereotype.Component;
 
 /**

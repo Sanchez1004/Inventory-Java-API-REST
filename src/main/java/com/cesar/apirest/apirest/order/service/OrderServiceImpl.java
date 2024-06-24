@@ -1,11 +1,13 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.order.service;
 
 import com.cesar.apirest.apirest.exception.OrderException;
-import com.cesar.apirest.apirest.inventory.InventoryService;
+import com.cesar.apirest.apirest.inventory.service.InventoryService;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;
 import com.cesar.apirest.apirest.order.dto.OrderRequest;
 import com.cesar.apirest.apirest.order.dto.OrderMapper;
+import com.cesar.apirest.apirest.order.entity.OrderEntity;
+import com.cesar.apirest.apirest.order.repository.OrderRepository;
 import com.cesar.apirest.apirest.utils.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,10 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.inventory.service;
 
 import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import com.cesar.apirest.apirest.inventory.dto.InventoryMapper;
+import com.cesar.apirest.apirest.inventory.entity.InventoryEntity;
+import com.cesar.apirest.apirest.inventory.repository.InventoryRepository;
 import com.cesar.apirest.apirest.item.dto.ItemMapper;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import com.cesar.apirest.apirest.item.service.ItemService;

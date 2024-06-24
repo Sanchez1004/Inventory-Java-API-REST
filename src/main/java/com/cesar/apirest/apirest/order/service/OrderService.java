@@ -1,4 +1,4 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.order.service;
 
 import com.cesar.apirest.apirest.order.dto.OrderRequest;
 

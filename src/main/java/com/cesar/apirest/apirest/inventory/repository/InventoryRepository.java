@@ -1,5 +1,6 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.inventory.repository;
 
+import com.cesar.apirest.apirest.inventory.entity.InventoryEntity;
 import com.cesar.apirest.apirest.item.entity.ItemEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

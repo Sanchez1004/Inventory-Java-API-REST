@@ -1,5 +1,6 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.order.repository;
 
+import com.cesar.apirest.apirest.order.entity.OrderEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

@@ -1,6 +1,7 @@
-package com.cesar.apirest.apirest.order;
+package com.cesar.apirest.apirest.order.controller;
 
 import com.cesar.apirest.apirest.exception.OrderException;
+import com.cesar.apirest.apirest.order.service.OrderService;
 import com.cesar.apirest.apirest.order.dto.OrderRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
