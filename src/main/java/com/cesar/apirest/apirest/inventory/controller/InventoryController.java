@@ -1,5 +1,6 @@
-package com.cesar.apirest.apirest.inventory;
+package com.cesar.apirest.apirest.inventory.controller;
 
+import com.cesar.apirest.apirest.inventory.service.InventoryService;
 import com.cesar.apirest.apirest.inventory.dto.InventoryRequest;
 import com.cesar.apirest.apirest.exception.InventoryException;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import java.util.List;
  * Controller for handling inventory-related requests.
  */
 @RestController
-@RequestMapping("/inventory")
+@RequestMapping("/inventories")
 public class InventoryController {
 
     private final InventoryService inventoryService;
