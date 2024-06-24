@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
      * @return the user entity
      * @throws InventoryException if the user is not found
      */
-    private UserEntity getUserById(int id) {
+    private UserEntity getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new InventoryException("User not found with id: " + id));
     }
 
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserException if the user is not found
      */
     @Override
-    public UserRequest searchUserById(int id) {
+    public UserRequest searchUserById(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         Optional<UserRequest> userDTO = userEntity.map(userMapper::toUserDTO);
         return userDTO.orElseThrow(() -> new UserException("User not found with id: " + id));
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserException if the user request is null
      */
     @Override
-    public UserRequest updateUser(UserRequest userRequest, int id) {
+    public UserRequest updateUser(UserRequest userRequest, Long id) {
         if (userRequest == null) {
             throw new UserException("User request cannot be null");
         }

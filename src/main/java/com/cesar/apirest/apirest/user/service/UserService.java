@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
     List<UserRequest> getAllUsers();
-    UserRequest searchUserById(int id);
+    UserRequest searchUserById(Long id);
     UserRequest searchUserByEmail(String email);
-    UserRequest updateUser(UserRequest userRequest, int id);
+    UserRequest updateUser(UserRequest userRequest, Long id);
 }

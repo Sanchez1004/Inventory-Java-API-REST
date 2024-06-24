@@ -49,6 +49,42 @@ public class UserController {
     }
 
     /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user to retrieve
+     * @return the user details wrapped in a {@link ResponseEntity}
+     * @throws ResponseStatusException if the user is not found or any error occurs during the search
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/search-user-by-id/{id}")
+    public ResponseEntity<UserRequest> getUserById(@PathVariable Long id) {
+        try {
+            UserRequest userRequest = userService.searchUserById(id);
+            return ResponseEntity.ok(userRequest);
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email the email of the user to retrieve
+     * @return the user details wrapped in a {@link ResponseEntity}
+     * @throws ResponseStatusException if the user is not found or any error occurs during the search
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/search-user-by-email/{email}")
+    public ResponseEntity<UserRequest> getUserById(@PathVariable String email) {
+        try {
+            UserRequest userRequest = userService.searchUserByEmail(email);
+            return ResponseEntity.ok(userRequest);
+        } catch (UserException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    /**
      * Updates a user's information.
      *
      * @param userRequest the updated user information
@@ -57,7 +93,7 @@ public class UserController {
      */
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/admin/update-users/{id}")
-    public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable int id) {
+    public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable Long id) {
         try {
             UserRequest updatedUser = userService.updateUser(userRequest, id);
             return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
